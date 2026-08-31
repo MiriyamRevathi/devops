@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}CI Pipelines — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Continuous Integration Pipelines</h1>
+        <p>Interactive stage ordering, status state machine, and animated execution engine.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('pipelines.create') }}" class="btn btn-primary">+ New Pipeline</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Configured CI Workflows</h3>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Pipeline Name</th>
+                    <th>Stages</th>
+                    <th>Total Runs</th>
+                    <th>Last Status</th>
+                    <th>Trigger</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pipe in pipelines %}
+                <tr>
+                    <td><strong><a href="{{ url_for('pipelines.detail', pipeline_id=pipe.id) }}">{{ pipe.name }}</a></strong><br><small class="text-muted">{{ pipe.description }}</small></td>
+                    <td><span class="badge badge-info">{{ pipe.stages|length }} stages</span></td>
+                    <td>{{ pipe.total_runs }} runs</td>
+                    <td>
+                        <span class="badge badge-{% if pipe.last_run_status == 'SUCCESS' %}success{% elif pipe.last_run_status == 'FAILED' %}danger{% else %}secondary{% endif %}">
+                            {{ pipe.last_run_status }}
+                        </span>
+                    </td>
+                    <td><code>{{ pipe.trigger }}</code></td>
+                    <td>
+                        <a href="{{ url_for('pipelines.detail', pipeline_id=pipe.id) }}" class="btn-sm">View Pipeline</a>
+                        <form action="{{ url_for('pipelines.run_pipeline', pipeline_id=pipe.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-primary">Run Now</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

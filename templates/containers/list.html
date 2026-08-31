@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Container Engine — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Local Container Engine Simulator</h1>
+    <p>Simulates Docker container lifecycles safely (start, stop, restart, inspect, ports).</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Container ID</th>
+                    <th>Name</th>
+                    <th>Image : Tag</th>
+                    <th>Ports</th>
+                    <th>CPU %</th>
+                    <th>RAM (MB)</th>
+                    <th>Status</th>
+                    <th>Control Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cnt in containers %}
+                <tr>
+                    <td><code>{{ cnt.id }}</code></td>
+                    <td><strong>{{ cnt.name }}</strong></td>
+                    <td><code>{{ cnt.image }}:{{ cnt.tag }}</code></td>
+                    <td><code>{{ cnt.ports }}</code></td>
+                    <td>{{ cnt.cpu_percent }}%</td>
+                    <td>{{ cnt.memory_usage_mb }} MB</td>
+                    <td><span class="badge badge-{% if cnt.status == 'RUNNING' %}success{% else %}secondary{% endif %}">{{ cnt.status }}</span></td>
+                    <td>
+                        {% if cnt.status == 'RUNNING' %}
+                        <form action="{{ url_for('containers.stop', container_id=cnt.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-danger">Stop</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('containers.start', container_id=cnt.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-success">Start</button>
+                        </form>
+                        {% endif %}
+                        <form action="{{ url_for('containers.restart', container_id=cnt.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-warning">Restart</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "env_9d165700b20c",
+    "name": "Development",
+    "type_name": "development",
+    "cluster_name": "local-dev-cluster",
+    "health": "HEALTHY",
+    "active_version": "v1.2.0-dev",
+    "variables": {
+      "LOG_LEVEL": "INFO",
+      "DB_MAX_CONNECTIONS": "50"
+    },
+    "services_count": 4,
+    "created_at": "2026-08-31T10:34:14.884058+00:00",
+    "updated_at": "2026-08-31T10:34:14.884058+00:00"
+  },
+  {
+    "id": "env_65395a04d36d",
+    "name": "Testing",
+    "type_name": "qa",
+    "cluster_name": "qa-k8s-cluster",
+    "health": "HEALTHY",
+    "active_version": "v1.1.0-rc2",
+    "variables": {
+      "LOG_LEVEL": "INFO",
+      "DB_MAX_CONNECTIONS": "50"
+    },
+    "services_count": 4,
+    "created_at": "2026-08-31T10:34:14.884058+00:00",
+    "updated_at": "2026-08-31T10:34:14.884058+00:00"
+  },
+  {
+    "id": "env_96d31e8f03d6",
+    "name": "Staging",
+    "type_name": "staging",
+    "cluster_name": "staging-us-east-1",
+    "health": "HEALTHY",
+    "active_version": "v1.0.1",
+    "variables": {
+      "LOG_LEVEL": "INFO",
+      "DB_MAX_CONNECTIONS": "50"
+    },
+    "services_count": 4,
+    "created_at": "2026-08-31T10:34:14.884058+00:00",
+    "updated_at": "2026-08-31T10:34:14.884058+00:00"
+  },
+  {
+    "id": "env_b3013291efd9",
+    "name": "Production",
+    "type_name": "production",
+    "cluster_name": "prod-us-east-1",
+    "health": "HEALTHY",
+    "active_version": "v1.0.0",
+    "variables": {
+      "LOG_LEVEL": "INFO",
+      "DB_MAX_CONNECTIONS": "50"
+    },
+    "services_count": 4,
+    "created_at": "2026-08-31T10:34:14.884058+00:00",
+    "updated_at": "2026-08-31T10:34:14.884058+00:00"
+  }
+]

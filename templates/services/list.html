@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Service Catalog — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Microservice Catalog</h1>
+        <p>Enterprise service registry, real-time performance metrics, and restart controls.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('services.create') }}" class="btn btn-primary">+ Register Service</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Team</th>
+                    <th>Version</th>
+                    <th>Environment</th>
+                    <th>CPU %</th>
+                    <th>RAM (MB)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for svc in services %}
+                <tr>
+                    <td><strong><a href="{{ url_for('services.detail', service_id=svc.id) }}">{{ svc.name }}</a></strong></td>
+                    <td>{{ svc.team }}</td>
+                    <td><code>{{ svc.version }}</code></td>
+                    <td><span class="badge badge-info">{{ svc.environment }}</span></td>
+                    <td>{{ svc.cpu_usage }}%</td>
+                    <td>{{ svc.memory_usage }} MB</td>
+                    <td><span class="badge badge-{% if svc.status == 'RUNNING' %}success{% else %}danger{% endif %}">{{ svc.status }}</span></td>
+                    <td>
+                        <a href="{{ url_for('services.detail', service_id=svc.id) }}" class="btn-sm">Metrics</a>
+                        <form action="{{ url_for('services.restart', service_id=svc.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-warning">Restart</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

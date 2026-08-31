@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}500 - Internal Server Error | DevOpsFlow{% endblock %}
+{% block content %}
+<div class="error-container">
+    <div class="error-code">500</div>
+    <h2>Internal Platform Error</h2>
+    <p>An unanticipated execution error occurred in the DevOpsFlow engine.</p>
+    <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary">Return to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "pipe_ad22222b6178",
+    "name": "Main CI/CD Workflow",
+    "project_id": "proj_default",
+    "description": "Default Continuous Integration & Package Pipeline",
+    "stages": [
+      {
+        "id": "stg_33589218f16a",
+        "name": "Checkout",
+        "order": 1,
+        "commands": [
+          "git checkout main"
+        ],
+        "enabled": true
+      },
+      {
+        "id": "stg_6e3a912f318f",
+        "name": "Install",
+        "order": 2,
+        "commands": [
+          "pip install -r requirements.txt"
+        ],
+        "enabled": true
+      },
+      {
+        "id": "stg_79ee971a3d19",
+        "name": "Lint",
+        "order": 3,
+        "commands": [
+          "flake8 ."
+        ],
+        "enabled": true
+      },
+      {
+        "id": "stg_f00edbae6ac7",
+        "name": "Unit Test",
+        "order": 4,
+        "commands": [
+          "pytest tests/"
+        ],
+        "enabled": true
+      },
+      {
+        "id": "stg_6f6946a0f801",
+        "name": "Build",
+        "order": 5,
+        "commands": [
+          "docker build -t app:latest ."
+        ],
+        "enabled": true
+      },
+      {
+        "id": "stg_6b5fee8caa67",
+        "name": "Publish Artifact",
+        "order": 6,
+        "commands": [
+          "push-artifact --dest local"
+        ],
+        "enabled": true
+      }
+    ],
+    "is_active": true,
+    "trigger": "on_push",
+    "last_run_status": "SUCCESS",
+    "total_runs": 12,
+    "created_at": "2026-08-31T10:34:00.189459+00:00",
+    "updated_at": "2026-08-31T10:34:00.189459+00:00"
+  }
+]

@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — DevOpsFlow Control Center{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>DevOps Control Center Dashboard</h1>
+        <p>Real-time lifecycle monitoring, CI/CD pipeline execution status, and DORA performance analytics.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('pipelines.create') }}" class="btn btn-primary">+ New Pipeline</a>
+        <a href="{{ url_for('deployments.deploy') }}" class="btn btn-secondary">🚀 Deploy Release</a>
+    </div>
+</div>
+
+<!-- DORA & Key Metrics Cards -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-icon">📁</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ active_projects_count }}</div>
+            <div class="metric-label">Active Projects</div>
+        </div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-icon">🚀</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ total_runs_count }}</div>
+            <div class="metric-label">Pipeline Runs</div>
+        </div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-icon">✅</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ build_success_rate }}%</div>
+            <div class="metric-label">Build Success Rate</div>
+        </div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-icon">📦</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ prod_deployments_count }}</div>
+            <div class="metric-label">Production Deployments</div>
+        </div>
+    </div>
+    <div class="metric-card highlight">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ dora.rating }}</div>
+            <div class="metric-label">DORA Rating</div>
+        </div>
+    </div>
+    <div class="metric-card warning">
+        <div class="metric-icon">🚨</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ active_incidents|length }}</div>
+            <div class="metric-label">Active Incidents</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="dashboard-grid">
+    <!-- Left Column: Pipeline & Deployment Timelines -->
+    <div class="grid-column">
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent CI/CD Pipeline Runs</h3>
+                <a href="{{ url_for('pipelines.index') }}" class="btn-link">View All</a>
+            </div>
+            <div class="card-body">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Run #</th>
+                            <th>Branch</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for run in recent_runs %}
+                        <tr>
+                            <td><strong>#{{ run.run_number }}</strong></td>
+                            <td><code>{{ run.branch }}</code></td>
+                            <td>
+                                <span class="badge badge-{% if run.status == 'SUCCESS' %}success{% elif run.status == 'FAILED' %}danger{% else %}warning{% endif %}">
+                                    {{ run.status }}
+                                </span>
+                            </td>
+                            <td>{{ run.duration_seconds }}s</td>
+                            <td>
+                                <a href="{{ url_for('pipelines.run_detail', run_id=run.id) }}" class="btn-sm">Logs</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Production Deployments</h3>
+                <a href="{{ url_for('deployments.index') }}" class="btn-link">View All</a>
+            </div>
+            <div class="card-body">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Environment</th>
+                            <th>Version</th>
+                            <th>Status</th>
+                            <th>Operator</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dep in recent_deployments %}
+                        <tr>
+                            <td><code>{{ dep.id[:8] }}</code></td>
+                            <td><span class="badge badge-info">{{ dep.environment }}</span></td>
+                            <td><strong>{{ dep.version }}</strong></td>
+                            <td>
+                                <span class="badge badge-{% if dep.status == 'SUCCESS' %}success{% elif dep.status == 'FAILED' %}danger{% else %}warning{% endif %}">
+                                    {{ dep.status }}
+                                </span>
+                            </td>
+                            <td>{{ dep.deployed_by }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Services & Active Incidents -->
+    <div class="grid-column">
+        <div class="card">
+            <div class="card-header">
+                <h3>Microservices Health</h3>
+                <a href="{{ url_for('services.index') }}" class="btn-link">Service Catalog</a>
+            </div>
+            <div class="card-body">
+                <div class="services-list">
+                    {% for svc in services %}
+                    <div class="service-item">
+                        <div class="svc-info">
+                            <span class="svc-name">{{ svc.name }}</span>
+                            <span class="svc-ver">{{ svc.version }}</span>
+                        </div>
+                        <div class="svc-metrics">
+                            <span>CPU: {{ svc.cpu_usage }}%</span> |
+                            <span>RAM: {{ svc.memory_usage }}MB</span>
+                        </div>
+                        <div class="svc-status">
+                            <span class="badge badge-{% if svc.status == 'RUNNING' %}success{% else %}danger{% endif %}">
+                                {{ svc.status }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Active Incidents Summary</h3>
+                <a href="{{ url_for('incidents.index') }}" class="btn-link">Incident Room</a>
+            </div>
+            <div class="card-body">
+                {% if active_incidents %}
+                    {% for inc in active_incidents %}
+                    <div class="incident-alert-item">
+                        <div class="inc-head">
+                            <span class="badge badge-danger">{{ inc.severity }}</span>
+                            <strong>{{ inc.title }}</strong>
+                        </div>
+                        <p>{{ inc.summary }}</p>
+                        <div class="inc-meta">
+                            <span>Service: {{ inc.service }}</span> | <span>Assignee: {{ inc.assignee }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No active critical incidents. All systems operational. ✅</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

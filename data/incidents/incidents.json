@@ -1,0 +1,42 @@
+[
+  {
+    "id": "inc_ba1a915dd6a0",
+    "title": "High Latency on Payment Gateway DB Pool",
+    "service": "Payment Service",
+    "environment": "Production",
+    "assignee": "devops",
+    "severity": "HIGH",
+    "status": "INVESTIGATING",
+    "summary": "Database connection pool saturation causing 504 Gateway Timeouts.",
+    "timeline": [
+      {
+        "timestamp": "2026-08-31T10:34:00.325370+00:00",
+        "actor": "devops",
+        "action": "Incident Created",
+        "notes": "Database connection pool saturation causing 504 Gateway Timeouts."
+      }
+    ],
+    "created_at": "2026-08-31T10:34:00.325370+00:00",
+    "resolved_at": null
+  },
+  {
+    "id": "inc_f65f060e6f92",
+    "title": "Auth Service Token Verification Failure",
+    "service": "Auth Service",
+    "environment": "Staging",
+    "assignee": "developer",
+    "severity": "MEDIUM",
+    "status": "RESOLVED",
+    "summary": "Expired secret key rotation caused brief authentication failures.",
+    "timeline": [
+      {
+        "timestamp": "2026-08-31T10:34:00.325370+00:00",
+        "actor": "developer",
+        "action": "Incident Created",
+        "notes": "Expired secret key rotation caused brief authentication failures."
+      }
+    ],
+    "created_at": "2026-08-31T10:34:00.325370+00:00",
+    "resolved_at": null
+  }
+]

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Create Change Request — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Submit Change Request</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('changes.create') }}">
+            <div class="form-group">
+                <label for="title">Change Title</label>
+                <input type="text" id="title" name="title" class="form-control" required placeholder="e.g. Major Version DB Engine Upgrade">
+            </div>
+            <div class="form-group">
+                <label for="description">Description & Rationale</label>
+                <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="affected_services">Affected Microservices</label>
+                <input type="text" id="affected_services" name="affected_services" class="form-control" placeholder="Payment Service, Auth Service">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="risk_level">Risk Level</label>
+                    <select id="risk_level" name="risk_level" class="form-control">
+                        <option value="HIGH">HIGH</option>
+                        <option value="MEDIUM" selected>MEDIUM</option>
+                        <option value="LOW">LOW</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="impact">Business Impact</label>
+                    <select id="impact" name="impact" class="form-control">
+                        <option value="CRITICAL">CRITICAL</option>
+                        <option value="MODERATE" selected>MODERATE</option>
+                        <option value="MINOR">MINOR</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="rollback_plan">Rollback Plan</label>
+                <textarea id="rollback_plan" name="rollback_plan" class="form-control" rows="2" placeholder="Revert DNS or container tags..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Change Request</button>
+                <a href="{{ url_for('changes.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

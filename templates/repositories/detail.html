@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ repository.name }} — DevOpsFlow Git Simulator{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Repository: {{ repository.name }}</h1>
+        <p>Clone URL: <code>{{ repository.clone_url }}</code></p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('repositories.commits', repo_id=repository.id) }}" class="btn btn-primary">View Commit Log</a>
+        <a href="{{ url_for('repositories.pull_requests', repo_id=repository.id) }}" class="btn btn-secondary">Pull Requests</a>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <div class="card-header">
+            <h3>Active Branches</h3>
+        </div>
+        <div class="card-body">
+            <ul>
+                {% for branch in repository.branches %}
+                <li style="margin-bottom: 8px;">
+                    <code>{{ branch.name }}</code>
+                    {% if branch.is_default %}<span class="badge badge-success">DEFAULT</span>{% endif %}
+                    <small class="text-muted">Head: {{ branch.head_commit_hash }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <form method="POST" action="{{ url_for('repositories.create_branch', repo_id=repository.id) }}" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label for="branch_name">Create New Branch</label>
+                    <input type="text" id="branch_name" name="branch_name" class="form-control" required placeholder="feature/new-service">
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary">Create Branch</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Recent Commits</h3>
+        </div>
+        <div class="card-body">
+            {% for c in repository.commits[:5] %}
+            <div class="commit-item" style="border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 8px;">
+                <code>{{ c.hash }}</code> — <strong>{{ c.message }}</strong>
+                <div><small class="text-muted">Author: {{ c.author }} | Branch: {{ c.branch }} | {{ c.timestamp }}</small></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

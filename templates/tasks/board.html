@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}DevOps Task Board (Kanban) — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>DevOps Task Kanban Board</h1>
+        <p>Manage backlog, in-progress tasks, peer review, and completed operational items.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('tasks.create') }}" class="btn btn-primary">+ New Task Card</a>
+    </div>
+</div>
+
+<div class="kanban-board">
+    {% for col in columns %}
+    <div class="kanban-column">
+        <div class="column-header">
+            <h3>{{ col }}</h3>
+            <span class="badge badge-secondary">{{ board[col]|length }}</span>
+        </div>
+        <div class="column-body">
+            {% for task in board[col] %}
+            <div class="kanban-card">
+                <div class="card-title font-bold">{{ task.title }}</div>
+                <p class="card-desc text-muted">{{ task.description }}</p>
+                <div class="card-meta">
+                    <span class="badge badge-{% if task.priority == 'High' %}danger{% else %}info{% endif %}">{{ task.priority }}</span>
+                    <small>Assignee: {{ task.assignee }}</small>
+                </div>
+                <div class="card-actions mt-2">
+                    <form action="{{ url_for('tasks.move', task_id=task.id) }}" method="POST" class="move-form">
+                        <select name="column" onchange="this.form.submit()" class="form-control-sm">
+                            {% for target_col in columns %}
+                            <option value="{{ target_col }}" {% if target_col == col %}selected{% endif %}>Move to {{ target_col }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Environments — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Target Environments</h1>
+    <p>Monitor cluster health, active release versions, and configuration variables.</p>
+</div>
+
+<div class="metrics-grid">
+    {% for env in environments %}
+    <div class="metric-card">
+        <div class="metric-icon">🌐</div>
+        <div class="metric-data">
+            <div class="metric-value">{{ env.name }}</div>
+            <div class="metric-label">
+                Health: <span class="badge badge-{% if env.health == 'HEALTHY' %}success{% else %}warning{% endif %}">{{ env.health }}</span>
+            </div>
+            <div><small>Active: <strong>{{ env.active_version }}</strong></small></div>
+            <div style="margin-top: 8px;">
+                <a href="{{ url_for('environments.detail', env_id=env.id) }}" class="btn-sm">Configure</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

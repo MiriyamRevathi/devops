@@ -1,0 +1,20 @@
+[
+  {
+    "id": "rel_166bbfcea199",
+    "version_tag": "v1.0.0",
+    "project_id": "proj_default",
+    "title": "Initial Release v1.0.0",
+    "release_notes": "Initial production release with complete DevOps functionality.",
+    "author": "admin",
+    "artifacts": [
+      "v1.0.0.tar.gz"
+    ],
+    "deployment_targets": [
+      "Development",
+      "Staging",
+      "Production"
+    ],
+    "is_published": true,
+    "created_at": "2026-08-31T10:34:12.594542+00:00"
+  }
+]

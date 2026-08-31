@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Commits - {{ repository.name }} — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Commit History: {{ repository.name }}</h1>
+    <a href="{{ url_for('repositories.detail', repo_id=repository.id) }}" class="btn btn-outline">Back to Repo</a>
+</div>
+
+<div class="card card-form mb-4">
+    <div class="card-header">
+        <h3>Simulate New Git Commit</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('repositories.commits', repo_id=repository.id) }}">
+            <div class="form-group">
+                <label for="message">Commit Message</label>
+                <input type="text" id="message" name="message" class="form-control" required placeholder="feat: implement new microservice endpoint">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="branch">Target Branch</label>
+                    <select id="branch" name="branch" class="form-control">
+                        {% for b in repository.branches %}
+                        <option value="{{ b.name }}">{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="files">Changed Files (comma-separated)</label>
+                    <input type="text" id="files" name="files" class="form-control" value="src/main.py, tests/test_main.py">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Commit Changes</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Commit Hash</th>
+                    <th>Message</th>
+                    <th>Author</th>
+                    <th>Branch</th>
+                    <th>Additions / Deletions</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in repository.commits %}
+                <tr>
+                    <td><code>{{ c.hash }}</code></td>
+                    <td><strong>{{ c.message }}</strong></td>
+                    <td>{{ c.author }}</td>
+                    <td><span class="badge badge-info">{{ c.branch }}</span></td>
+                    <td><span class="text-success">+{{ c.additions }}</span> / <span class="text-danger">-{{ c.deletions }}</span></td>
+                    <td>{{ c.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

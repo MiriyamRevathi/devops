@@ -1,0 +1,83 @@
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">⚙️</div>
+        <div class="brand-text">
+            <h2>DevOpsFlow</h2>
+            <span class="brand-tag">ENTERPRISE v1.0</span>
+        </div>
+    </div>
+    <nav class="sidebar-menu">
+        <div class="menu-label">OVERVIEW</div>
+        <a href="{{ url_for('dashboard.index') }}" class="menu-item">
+            <span class="icon">📊</span> Dashboard
+        </a>
+        <a href="{{ url_for('analytics.dora') }}" class="menu-item">
+            <span class="icon">📈</span> DORA Metrics
+        </a>
+
+        <div class="menu-label">DEVELOPMENT & CI/CD</div>
+        <a href="{{ url_for('projects.index') }}" class="menu-item">
+            <span class="icon">📁</span> Projects
+        </a>
+        <a href="{{ url_for('repositories.index') }}" class="menu-item">
+            <span class="icon">🌿</span> Source Repos
+        </a>
+        <a href="{{ url_for('pipelines.index') }}" class="menu-item">
+            <span class="icon">🚀</span> CI Pipelines
+        </a>
+        <a href="{{ url_for('deployments.index') }}" class="menu-item">
+            <span class="icon">📦</span> Deployments
+        </a>
+        <a href="{{ url_for('releases.index') }}" class="menu-item">
+            <span class="icon">🏷️</span> Releases
+        </a>
+        <a href="{{ url_for('artifacts.index') }}" class="menu-item">
+            <span class="icon">🗄️</span> Artifact Registry
+        </a>
+
+        <div class="menu-label">INFRASTRUCTURE & OPS</div>
+        <a href="{{ url_for('environments.index') }}" class="menu-item">
+            <span class="icon">🌐</span> Environments
+        </a>
+        <a href="{{ url_for('services.index') }}" class="menu-item">
+            <span class="icon">⚡</span> Service Catalog
+        </a>
+        <a href="{{ url_for('containers.index') }}" class="menu-item">
+            <span class="icon">🐳</span> Container Engine
+        </a>
+        <a href="{{ url_for('infrastructure.index') }}" class="menu-item">
+            <span class="icon">🏗️</span> Infrastructure (IaC)
+        </a>
+
+        <div class="menu-label">OBSERVABILITY & GOVERNANCE</div>
+        <a href="{{ url_for('monitoring.index') }}" class="menu-item">
+            <span class="icon">🩺</span> System Monitoring
+        </a>
+        <a href="{{ url_for('logs.viewer') }}" class="menu-item">
+            <span class="icon">📜</span> Centralized Logs
+        </a>
+        <a href="{{ url_for('incidents.index') }}" class="menu-item">
+            <span class="icon">🚨</span> Incidents
+        </a>
+        <a href="{{ url_for('alerts.index') }}" class="menu-item">
+            <span class="icon">🔔</span> Alert Rules
+        </a>
+        <a href="{{ url_for('security.index') }}" class="menu-item">
+            <span class="icon">🛡️</span> Security Dashboard
+        </a>
+
+        <div class="menu-label">ORGANIZATION</div>
+        <a href="{{ url_for('teams.index') }}" class="menu-item">
+            <span class="icon">👥</span> Teams & Members
+        </a>
+        <a href="{{ url_for('tasks.index') }}" class="menu-item">
+            <span class="icon">📋</span> Task Board (Kanban)
+        </a>
+        <a href="{{ url_for('changes.index') }}" class="menu-item">
+            <span class="icon">📝</span> Change Requests (CAB)
+        </a>
+        <a href="{{ url_for('audit.index') }}" class="menu-item">
+            <span class="icon">🔒</span> Audit Trail
+        </a>
+    </nav>
+</aside>

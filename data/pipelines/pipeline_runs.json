@@ -1,0 +1,46 @@
+[
+  {
+    "id": "run_75daf9aeba57",
+    "pipeline_id": "pipe_ad22222b6178",
+    "project_id": "proj_default",
+    "branch": "main",
+    "commit_hash": "a1b2c3d",
+    "run_number": 1,
+    "triggered_by": "admin",
+    "status": "SUCCESS",
+    "stage_results": [
+      {
+        "stage_name": "Checkout",
+        "status": "SUCCESS",
+        "duration": 1.2
+      },
+      {
+        "stage_name": "Install",
+        "status": "SUCCESS",
+        "duration": 3.4
+      },
+      {
+        "stage_name": "Lint",
+        "status": "SUCCESS",
+        "duration": 2.1
+      },
+      {
+        "stage_name": "Unit Test",
+        "status": "SUCCESS",
+        "duration": 4.8
+      },
+      {
+        "stage_name": "Build",
+        "status": "SUCCESS",
+        "duration": 3.0
+      }
+    ],
+    "logs": [
+      "[INFO] Starting pipeline execution...",
+      "[SUCCESS] Pipeline finished with code 0."
+    ],
+    "duration_seconds": 14.5,
+    "started_at": null,
+    "completed_at": null
+  }
+]

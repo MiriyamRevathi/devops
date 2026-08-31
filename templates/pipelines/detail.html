@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ pipeline.name }} — DevOpsFlow Pipeline{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Pipeline: {{ pipeline.name }}</h1>
+        <p>{{ pipeline.description }}</p>
+    </div>
+    <div class="header-actions">
+        <form action="{{ url_for('pipelines.run_pipeline', pipeline_id=pipeline.id) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="simulate_failure" value="false">
+            <button type="submit" class="btn btn-success">▶ Run Pipeline (Pass)</button>
+        </form>
+        <form action="{{ url_for('pipelines.run_pipeline', pipeline_id=pipeline.id) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="simulate_failure" value="true">
+            <button type="submit" class="btn btn-danger">⚡ Run Pipeline (Simulate Failure)</button>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Pipeline Stage Flow</h3>
+    </div>
+    <div class="card-body">
+        <div class="stage-pipeline-flow">
+            {% for stg in pipeline.stages %}
+            <div class="stage-pill">
+                <span class="stage-order">{{ stg.order }}</span>
+                <span class="stage-name">{{ stg.name }}</span>
+            </div>
+            {% if not loop.last %}<span class="stage-arrow">➔</span>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Execution Run History</h3>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Run #</th>
+                    <th>Branch</th>
+                    <th>Status</th>
+                    <th>Duration</th>
+                    <th>Triggered By</th>
+                    <th>Started At</th>
+                    <th>Logs</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in runs %}
+                <tr>
+                    <td><strong>#{{ r.run_number }}</strong></td>
+                    <td><code>{{ r.branch }}</code></td>
+                    <td>
+                        <span class="badge badge-{% if r.status == 'SUCCESS' %}success{% elif r.status == 'FAILED' %}danger{% else %}warning{% endif %}">
+                            {{ r.status }}
+                        </span>
+                    </td>
+                    <td>{{ r.duration_seconds }}s</td>
+                    <td>{{ r.triggered_by }}</td>
+                    <td>{{ r.started_at }}</td>
+                    <td><a href="{{ url_for('pipelines.run_detail', run_id=r.id) }}" class="btn-sm">View Stream</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

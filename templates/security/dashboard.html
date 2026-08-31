@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Security Dashboard — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Local Security Findings & Dependency Scanner</h1>
+        <p>Inspect outdated dependencies, exposed secrets patterns, and security misconfigurations.</p>
+    </div>
+    <div class="header-actions">
+        <form action="{{ url_for('security.scan') }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-primary">🛡️ Run Security Scan</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>Category</th>
+                    <th>Finding Title</th>
+                    <th>Target File</th>
+                    <th>Recommendation</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in findings %}
+                <tr>
+                    <td><span class="badge badge-{% if f.severity in ['HIGH','CRITICAL'] %}danger{% else %}warning{% endif %}">{{ f.severity }}</span></td>
+                    <td><span class="badge badge-info">{{ f.category }}</span></td>
+                    <td><strong>{{ f.title }}</strong><br><small class="text-muted">{{ f.description }}</small></td>
+                    <td><code>{{ f.target_file }}</code></td>
+                    <td>{{ f.recommendation }}</td>
+                    <td><span class="badge badge-{% if f.status == 'RESOLVED' %}success{% else %}danger{% endif %}">{{ f.status }}</span></td>
+                    <td>
+                        {% if f.status != 'RESOLVED' %}
+                        <form action="{{ url_for('security.resolve', finding_id=f.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-success">Resolve</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

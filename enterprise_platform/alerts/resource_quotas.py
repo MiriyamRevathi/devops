@@ -1,0 +1,14 @@
+"""
+Resource Quotas and Capacity Limits for alerts.
+"""
+from typing import Tuple, Dict, Any
+
+class AlertsResourceQuotas:
+    """Enforces resource allocation quotas for alerts."""
+    def __init__(self, max_allowed: int = 100):
+        self.max_allowed = max_allowed
+
+    def check_quota(self, current_usage: int, requested: int) -> Tuple[bool, str]:
+        if current_usage + requested > self.max_allowed:
+            return False, f"Quota exceeded: current {current_usage} + requested {requested} > max {self.max_allowed}."
+        return True, "Quota check passed."

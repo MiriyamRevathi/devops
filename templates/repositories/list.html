@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Source Repositories — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Local Source Repositories</h1>
+    <p>Simulated Git repository workspace with branch, commit, PR, and merge workflows.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Repository Name</th>
+                    <th>Clone URL</th>
+                    <th>Branches</th>
+                    <th>Commits</th>
+                    <th>Pull Requests</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repo in repositories %}
+                <tr>
+                    <td><strong><a href="{{ url_for('repositories.detail', repo_id=repo.id) }}">{{ repo.name }}</a></strong></td>
+                    <td><code>{{ repo.clone_url }}</code></td>
+                    <td><span class="badge badge-info">{{ repo.branches|length }} branches</span></td>
+                    <td>{{ repo.commits|length }} commits</td>
+                    <td>{{ repo.pull_requests|length }} PRs</td>
+                    <td>
+                        <a href="{{ url_for('repositories.detail', repo_id=repo.id) }}" class="btn-sm">Explore Repo</a>
+                        <a href="{{ url_for('repositories.commits', repo_id=repo.id) }}" class="btn-sm btn-outline">Commits</a>
+                        <a href="{{ url_for('repositories.pull_requests', repo_id=repo.id) }}" class="btn-sm btn-outline">PRs</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DevOpsFlow — Enterprise DevOps Platform{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+</head>
+<body class="devopsflow-body">
+    {% if session.get('user_id') %}
+    <div class="app-layout">
+        {% include 'sidebar.html' %}
+        <div class="main-content">
+            {% include 'navbar.html' %}
+            <main class="page-container">
+                {% include 'alerts.html' %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    {% else %}
+    <div class="auth-layout">
+        {% include 'alerts.html' %}
+        {% block auth_content %}{% endblock %}
+    </div>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

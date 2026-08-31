@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ environment.name }} Environment — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Environment: {{ environment.name }}</h1>
+        <p>Cluster: <code>{{ environment.cluster_name }}</code> | Active Version: <strong>{{ environment.active_version }}</strong></p>
+    </div>
+    <div class="header-actions">
+        <form action="{{ url_for('environments.health_check', env_id=environment.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-primary">🩺 Trigger Health Check</button>
+        </form>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <div class="card-header">
+            <h3>Environment Configuration Variables</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table mb-4">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for k, v in environment.variables.items() %}
+                    <tr>
+                        <td><code>{{ k }}</code></td>
+                        <td><code>{{ v }}</code></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <form method="POST" action="{{ url_for('environments.set_variable', env_id=environment.id) }}">
+                <h4>Add / Update Variable</h4>
+                <div class="form-row">
+                    <div class="form-group col-5">
+                        <input type="text" name="key" class="form-control" required placeholder="VARIABLE_NAME">
+                    </div>
+                    <div class="form-group col-5">
+                        <input type="text" name="value" class="form-control" required placeholder="Value">
+                    </div>
+                    <div class="form-group col-2">
+                        <button type="submit" class="btn btn-success btn-block">Set</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

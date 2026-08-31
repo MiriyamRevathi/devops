@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}CD Deployments — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Continuous Deployment Center</h1>
+        <p>Orchestrate multi-environment deployments, approvals, and automated rollbacks.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('deployments.deploy') }}" class="btn btn-primary">🚀 Trigger Deployment</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Deployment ID</th>
+                    <th>Target Environment</th>
+                    <th>Release Version</th>
+                    <th>Status</th>
+                    <th>Approval</th>
+                    <th>Deployed By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dep in deployments %}
+                <tr>
+                    <td><code>{{ dep.id[:8] }}</code></td>
+                    <td><span class="badge badge-info">{{ dep.environment }}</span></td>
+                    <td><strong>{{ dep.version }}</strong></td>
+                    <td>
+                        <span class="badge badge-{% if dep.status == 'SUCCESS' %}success{% elif dep.status == 'FAILED' %}danger{% elif dep.status == 'ROLLED_BACK' %}secondary{% else %}warning{% endif %}">
+                            {{ dep.status }}
+                        </span>
+                    </td>
+                    <td><span class="badge badge-{% if dep.approval_status == 'APPROVED' %}success{% else %}warning{% endif %}">{{ dep.approval_status }}</span></td>
+                    <td>{{ dep.deployed_by }}</td>
+                    <td><a href="{{ url_for('deployments.detail', deployment_id=dep.id) }}" class="btn-sm">Inspect</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

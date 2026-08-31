@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Create Task Card — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Create Task Card</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('tasks.create') }}">
+            <div class="form-group">
+                <label for="title">Task Title</label>
+                <input type="text" id="title" name="title" class="form-control" required placeholder="e.g. Audit IAM role permissions">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <label for="assignee">Assignee</label>
+                    <input type="text" id="assignee" name="assignee" class="form-control" value="devops">
+                </div>
+                <div class="form-group col-4">
+                    <label for="priority">Priority</label>
+                    <select id="priority" name="priority" class="form-control">
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="column">Kanban Column</label>
+                    <select id="column" name="column" class="form-control">
+                        {% for col in columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create Task</button>
+                <a href="{{ url_for('tasks.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

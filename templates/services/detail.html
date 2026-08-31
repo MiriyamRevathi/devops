@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ service.name }} — Service Catalog{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Microservice: {{ service.name }}</h1>
+        <p>Owner: {{ service.owner }} | Team: {{ service.team }}</p>
+    </div>
+    <div class="header-actions">
+        <form action="{{ url_for('services.restart', service_id=service.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-warning">🔄 Restart Service</button>
+        </form>
+    </div>
+</div>
+
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-value">{{ service.cpu_usage }}%</div>
+        <div class="metric-label">CPU Usage</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ service.memory_usage }} MB</div>
+        <div class="metric-label">Memory Allocated</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ service.request_count }}</div>
+        <div class="metric-label">Total Requests</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ (service.error_rate * 100)|round(2) }}%</div>
+        <div class="metric-label">Error Rate</div>
+    </div>
+</div>
+{% endblock %}

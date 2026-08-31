@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Alert Rules — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Automated Alert Rules</h1>
+        <p>Define metric threshold triggers (CPU &gt; 80%, Memory &gt; 85%, Error Rate &gt; 5%).</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('alerts.create') }}" class="btn btn-primary">+ New Alert Rule</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Rule Name</th>
+                    <th>Target Metric</th>
+                    <th>Condition</th>
+                    <th>Threshold</th>
+                    <th>Target Service</th>
+                    <th>State</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rule in rules %}
+                <tr>
+                    <td><strong>{{ rule.name }}</strong></td>
+                    <td><code>{{ rule.metric }}</code></td>
+                    <td><code>{{ rule.condition }}</code></td>
+                    <td><strong>{{ rule.threshold }}</strong></td>
+                    <td>{{ rule.service }}</td>
+                    <td>
+                        <span class="badge badge-{% if rule.triggered %}danger{% else %}success{% endif %}">
+                            {% if rule.triggered %}TRIGGERED{% else %}OK{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {% if not rule.triggered %}
+                        <form action="{{ url_for('alerts.trigger', alert_id=rule.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-warning">Trigger Simulation</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('alerts.resolve', alert_id=rule.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-success">Acknowledge / Resolve</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

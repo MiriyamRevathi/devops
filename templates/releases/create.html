@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Create Release — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Create Release Tag</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('releases.create') }}">
+            <div class="form-group">
+                <label for="version_tag">Version Tag</label>
+                <input type="text" id="version_tag" name="version_tag" class="form-control" required placeholder="e.g. v1.2.0">
+            </div>
+            <div class="form-group">
+                <label for="title">Release Title</label>
+                <input type="text" id="title" name="title" class="form-control" required placeholder="Major Spring Release">
+            </div>
+            <div class="form-group">
+                <label for="release_notes">Release Notes & Changelog</label>
+                <textarea id="release_notes" name="release_notes" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Deployment Target Environments</label>
+
+                <label class="checkbox-label" style="display:block;">
+                    <input type="checkbox" name="targets" value="Development" checked> Development
+                </label>
+                <label class="checkbox-label" style="display:block;">
+                    <input type="checkbox" name="targets" value="Staging" checked> Staging
+                </label>
+                <label class="checkbox-label" style="display:block;">
+                    <input type="checkbox" name="targets" value="Production"> Production
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Publish Release Tag</button>
+                <a href="{{ url_for('releases.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

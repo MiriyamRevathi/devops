@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Login — DevOpsFlow{% endblock %}
+{% block auth_content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <div class="auth-logo">⚙️</div>
+        <h1>DevOpsFlow Control Center</h1>
+        <p>Local DevOps Lifecycle Management Platform</p>
+    </div>
+    <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required placeholder="admin">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required placeholder="admin123">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+    </form>
+
+    <div class="auth-demo-accounts">
+        <h4>Demo Accounts (Password: role + '123' or 'admin123'):</h4>
+        <ul>
+            <li><code>admin</code> / <code>admin123</code> (Admin)</li>
+            <li><code>devops</code> / <code>devops123</code> (DevOps Engineer)</li>
+            <li><code>developer</code> / <code>dev123</code> (Developer)</li>
+        </ul>
+    </div>
+    <div class="auth-footer">
+        <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+    </div>
+</div>
+{% endblock %}

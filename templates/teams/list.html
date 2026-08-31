@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Teams & Members — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Engineering Teams</h1>
+        <p>Manage DevOps teams, member assignments, and project ownership.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('teams.create') }}" class="btn btn-primary">+ Create Team</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Description</th>
+                    <th>Team Lead</th>
+                    <th>Members</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in teams %}
+                <tr>
+                    <td><strong>{{ t.name }}</strong></td>
+                    <td>{{ t.description }}</td>
+                    <td><span class="badge badge-info">{{ t.lead }}</span></td>
+                    <td>{% for m in t.members %}<span class="badge badge-secondary">{{ m }}</span> {% endfor %}</td>
+                    <td>{{ t.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

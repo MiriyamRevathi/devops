@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Pipeline Run #{{ run.run_number }} Log Stream — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Run #{{ run.run_number }} Log Stream</h1>
+    <p>Status: <span class="badge badge-{% if run.status == 'SUCCESS' %}success{% elif run.status == 'FAILED' %}danger{% else %}warning{% endif %}">{{ run.status }}</span> | Duration: {{ run.duration_seconds }}s</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Stage Breakdown</h3>
+    </div>
+    <div class="card-body">
+        <div class="stage-breakdown-list">
+            {% for stg in run.stage_results %}
+            <div class="stage-result-item" style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                <span><strong>{{ stg.stage_name }}</strong></span>
+                <span>
+                    <span class="badge badge-{% if stg.status == 'SUCCESS' %}success{% elif stg.status == 'FAILED' %}danger{% else %}secondary{% endif %}">{{ stg.status }}</span>
+                    <small>({{ stg.duration }}s)</small>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Execution Logs Output</h3>
+    </div>
+    <div class="card-body">
+        <div class="terminal-log-viewer">
+            {% for line in run.logs %}
+            <div class="log-line">{{ line }}</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

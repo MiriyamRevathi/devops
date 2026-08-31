@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Incidents — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Incident Response Room</h1>
+        <p>Manage outages, severity levels, timeline events, and SLA resolution workflows.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('incidents.create') }}" class="btn btn-danger">+ Report Incident</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Incident ID</th>
+                    <th>Title</th>
+                    <th>Service</th>
+                    <th>Environment</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inc in incidents %}
+                <tr>
+                    <td><code>{{ inc.id[:8] }}</code></td>
+                    <td><strong><a href="{{ url_for('incidents.detail', incident_id=inc.id) }}">{{ inc.title }}</a></strong></td>
+                    <td>{{ inc.service }}</td>
+                    <td><span class="badge badge-info">{{ inc.environment }}</span></td>
+                    <td><span class="badge badge-{% if inc.severity in ['HIGH','CRITICAL'] %}danger{% else %}warning{% endif %}">{{ inc.severity }}</span></td>
+                    <td><span class="badge badge-{% if inc.status in ['RESOLVED','CLOSED'] %}success{% else %}warning{% endif %}">{{ inc.status }}</span></td>
+                    <td>{{ inc.assignee }}</td>
+                    <td><a href="{{ url_for('incidents.detail', incident_id=inc.id) }}" class="btn-sm">Timeline</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

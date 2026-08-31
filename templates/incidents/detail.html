@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Incident {{ incident.id[:8] }} — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Incident: {{ incident.title }}</h1>
+        <p>Service: {{ incident.service }} | Status: <span class="badge badge-{% if incident.status in ['RESOLVED','CLOSED'] %}success{% else %}danger{% endif %}">{{ incident.status }}</span></p>
+    </div>
+    <div class="header-actions">
+        {% if incident.status != 'RESOLVED' and incident.status != 'CLOSED' %}
+        <form action="{{ url_for('incidents.update_status', incident_id=incident.id) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="status" value="RESOLVED">
+            <button type="submit" class="btn btn-success">✅ Resolve Incident</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Update Incident Status</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('incidents.update_status', incident_id=incident.id) }}" class="form-row">
+            <div class="form-group col-4">
+                <select name="status" class="form-control">
+                    <option value="OPEN">OPEN</option>
+                    <option value="INVESTIGATING">INVESTIGATING</option>
+                    <option value="MITIGATING">MITIGATING</option>
+                    <option value="RESOLVED">RESOLVED</option>
+                    <option value="CLOSED">CLOSED</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <input type="text" name="notes" class="form-control" placeholder="Add update notes...">
+            </div>
+            <div class="form-group col-2">
+                <button type="submit" class="btn btn-primary btn-block">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Incident Timeline History</h3>
+    </div>
+    <div class="card-body">
+        <ul class="timeline-list" style="list-style:none; padding:0;">
+            {% for item in incident.timeline %}
+            <li style="border-left: 2px solid #0284c7; padding-left: 15px; margin-bottom: 15px;">
+                <strong>{{ item.action }}</strong> — <small class="text-muted">{{ item.timestamp }} by {{ item.actor }}</small>
+                <p style="margin-top: 4px;">{{ item.notes }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

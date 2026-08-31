@@ -1,0 +1,62 @@
+[
+  {
+    "id": "usr_e8ed401ff263",
+    "username": "admin",
+    "email": "admin@devopsflow.local",
+    "password_hash": "eb2934e2a6eb7c220a2b3c95f94c7686$6230b4d76081346e9bce6b3b9d29527c11207178a400510577face6fab9c1f11",
+    "role": "Admin",
+    "full_name": "Platform Admin",
+    "is_active": true,
+    "team_ids": [],
+    "created_at": "2026-08-31T10:33:59.614974+00:00",
+    "last_login": "2026-08-31T10:34:00.124778+00:00"
+  },
+  {
+    "id": "usr_8e3081b9a78b",
+    "username": "devops",
+    "email": "devops@devopsflow.local",
+    "password_hash": "6082bd91fad60f28a974dfb429fbdf55$6dbd2b4dedfd374cc895f5fb00efc9377767d0315aca79cbf0c545624950bd7a",
+    "role": "DevOps Engineer",
+    "full_name": "Lead DevOps Engineer",
+    "is_active": true,
+    "team_ids": [],
+    "created_at": "2026-08-31T10:33:59.688360+00:00",
+    "last_login": null
+  },
+  {
+    "id": "usr_d65923352a6e",
+    "username": "developer",
+    "email": "developer@devopsflow.local",
+    "password_hash": "ae42b1a7bfa166f32a5b286f3a16c24f$c8d8d1310c3bda6d6edfbd030136d4dac41d487d4c6f10001a4c2abdc61080ad",
+    "role": "Developer",
+    "full_name": "Senior Software Developer",
+    "is_active": true,
+    "team_ids": [],
+    "created_at": "2026-08-31T10:33:59.767722+00:00",
+    "last_login": null
+  },
+  {
+    "id": "usr_a4e213660255",
+    "username": "qa",
+    "email": "qa@devopsflow.local",
+    "password_hash": "8a8f8c1e3ac90dcfaac4fb71b718edd5$90bac969cd2f9e91c20fca56c5f01669be874c819393b684eeb75566f7099a26",
+    "role": "QA Engineer",
+    "full_name": "QA Lead",
+    "is_active": true,
+    "team_ids": [],
+    "created_at": "2026-08-31T10:33:59.845163+00:00",
+    "last_login": null
+  },
+  {
+    "id": "usr_329582f531a9",
+    "username": "viewer",
+    "email": "viewer@devopsflow.local",
+    "password_hash": "b1a0ce6962aa3175ed7c2a9044ad9865$f22e1a55bd6a6177d4770d7d65e821c43db1b194e102dfb62f0863674ba825f0",
+    "role": "Viewer",
+    "full_name": "Guest Viewer",
+    "is_active": true,
+    "team_ids": [],
+    "created_at": "2026-08-31T10:33:59.937653+00:00",
+    "last_login": null
+  }
+]

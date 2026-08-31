@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Infrastructure (IaC) — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Infrastructure-as-Code (IaC) Manager</h1>
+        <p>Terraform-style Plan ➔ Review ➔ Apply ➔ Destroy provisioning workflow.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('infrastructure.plan') }}" class="btn btn-primary">+ Generate IaC Plan</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Provisioned Infrastructure Resources</h3>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Type</th>
+                    <th>Provider</th>
+                    <th>Environment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in resources %}
+                <tr>
+                    <td><strong>{{ res.name }}</strong></td>
+                    <td><span class="badge badge-info">{{ res.resource_type }}</span></td>
+                    <td>{{ res.provider }}</td>
+                    <td>{{ res.environment }}</td>
+                    <td><span class="badge badge-{% if res.status == 'APPLIED' %}success{% else %}secondary{% endif %}">{{ res.status }}</span></td>
+                    <td>
+                        {% if res.status == 'APPLIED' %}
+                        <form action="{{ url_for('infrastructure.destroy_resource', resource_id=res.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-danger">Destroy</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Recent IaC Execution Plans</h3>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Plan ID</th>
+                    <th>Environment</th>
+                    <th>Changes</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pl in plans %}
+                <tr>
+                    <td><code>{{ pl.id[:8] }}</code></td>
+                    <td>{{ pl.environment }}</td>
+                    <td><span class="text-success">+{{ pl.to_add }} add</span>, <span class="text-warning">~{{ pl.to_change }} change</span>, <span class="text-danger">-{{ pl.to_destroy }} destroy</span></td>
+                    <td><span class="badge badge-{% if pl.status == 'APPLIED' %}success{% else %}warning{% endif %}">{{ pl.status }}</span></td>
+                    <td><a href="{{ url_for('infrastructure.plan_detail', plan_id=pl.id) }}" class="btn-sm">Review & Apply</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

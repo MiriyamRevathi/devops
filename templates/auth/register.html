@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Register — DevOpsFlow{% endblock %}
+{% block auth_content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <div class="auth-logo">⚙️</div>
+        <h1>Create DevOpsFlow Account</h1>
+        <p>Local DevOps Lifecycle Management</p>
+    </div>
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required placeholder="johndoe">
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" required placeholder="john@devopsflow.local">
+        </div>
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" class="form-control" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+            <label for="role">Platform Role</label>
+            <select id="role" name="role" class="form-control">
+                <option value="Developer">Developer</option>
+                <option value="DevOps Engineer">DevOps Engineer</option>
+                <option value="QA Engineer">QA Engineer</option>
+                <option value="Viewer">Viewer</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register Account</button>
+    </form>
+    <div class="auth-footer">
+        <p>Already registered? <a href="{{ url_for('auth.login') }}">Login</a></p>
+    </div>
+</div>
+{% endblock %}

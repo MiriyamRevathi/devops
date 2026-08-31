@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Artifact Registry — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Local Package Artifact Registry</h1>
+        <p>Store, version, inspect metadata, and download build packages (wheels, tars, zips, container images).</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('artifacts.register') }}" class="btn btn-primary">+ Register Artifact</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Version Tag</th>
+                    <th>Type</th>
+                    <th>Size (Bytes)</th>
+                    <th>Checksum SHA256</th>
+                    <th>Created By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for art in artifacts %}
+                <tr>
+                    <td><strong>{{ art.name }}</strong></td>
+                    <td><code>{{ art.version }}</code></td>
+                    <td><span class="badge badge-info">{{ art.artifact_type }}</span></td>
+                    <td>{{ art.size_bytes }} B</td>
+                    <td><code>{{ art.checksum_sha256[:12] }}...</code></td>
+                    <td>{{ art.created_by }}</td>
+                    <td>
+                        <form action="{{ url_for('artifacts.delete', artifact_id=art.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

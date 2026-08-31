@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Centralized Logs — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Centralized Log Management</h1>
+    <p>Multi-service log stream aggregator with severity filtering and search.</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <form method="GET" action="{{ url_for('logs.viewer') }}" class="filter-form">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search log messages or trace IDs..." class="form-control">
+            <select name="severity" class="form-control" onchange="this.form.submit()">
+                <option value="All">All Severities</option>
+                <option value="INFO" {% if severity == 'INFO' %}selected{% endif %}>INFO</option>
+                <option value="WARNING" {% if severity == 'WARNING' %}selected{% endif %}>WARNING</option>
+                <option value="ERROR" {% if severity == 'ERROR' %}selected{% endif %}>ERROR</option>
+                <option value="DEBUG" {% if severity == 'DEBUG' %}selected{% endif %}>DEBUG</option>
+            </select>
+            <button type="submit" class="btn btn-secondary">Filter Logs</button>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="terminal-log-viewer">
+            {% for log in logs %}
+            <div class="log-line">
+                <span class="log-time">[{{ log.timestamp }}]</span>
+                <span class="badge badge-{% if log.severity == 'ERROR' %}danger{% elif log.severity == 'WARNING' %}warning{% else %}info{% endif %}">{{ log.severity }}</span>
+                <span class="log-svc">[{{ log.service }}|{{ log.environment }}]</span>
+                <span class="log-msg">{{ log.message }}</span>
+                <span class="log-trace">(Trace: {{ log.trace_id }})</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

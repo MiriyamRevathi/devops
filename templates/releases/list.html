@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Release Versions — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Release Version Management</h1>
+        <p>Manage tagged releases, changelogs, and package artifacts.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('releases.create') }}" class="btn btn-primary">+ Create Release Tag</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Version Tag</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Deployment Targets</th>
+                    <th>Published</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rel in releases %}
+                <tr>
+                    <td><strong><code>{{ rel.version_tag }}</code></strong></td>
+                    <td>{{ rel.title }}</td>
+                    <td>{{ rel.author }}</td>
+                    <td>{% for t in rel.deployment_targets %}<span class="badge badge-info">{{ t }}</span> {% endfor %}</td>
+                    <td><span class="badge badge-success">PUBLISHED</span></td>
+                    <td>{{ rel.created_at }}</td>
+                    <td><a href="{{ url_for('releases.detail', release_id=rel.id) }}" class="btn-sm">Release Notes</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

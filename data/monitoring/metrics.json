@@ -1,0 +1,182 @@
+[
+  {
+    "cpu_percent": 46.9,
+    "memory_percent": 71.5,
+    "disk_percent": 61.2,
+    "response_time_ms": 102.2,
+    "error_rate": 0.032,
+    "request_rate": 246.6,
+    "timestamp": "2026-08-31T10:34:00.348970+00:00"
+  },
+  {
+    "cpu_percent": 46.6,
+    "memory_percent": 46.3,
+    "disk_percent": 55.2,
+    "response_time_ms": 163.3,
+    "error_rate": 0.027,
+    "request_rate": 359.6,
+    "timestamp": "2026-08-31T10:34:00.356139+00:00"
+  },
+  {
+    "cpu_percent": 69.9,
+    "memory_percent": 78.8,
+    "disk_percent": 58.2,
+    "response_time_ms": 329.6,
+    "error_rate": 0.008,
+    "request_rate": 166.9,
+    "timestamp": "2026-08-31T10:34:00.370128+00:00"
+  },
+  {
+    "cpu_percent": 34.6,
+    "memory_percent": 76.9,
+    "disk_percent": 57.0,
+    "response_time_ms": 298.5,
+    "error_rate": 0.009,
+    "request_rate": 311.0,
+    "timestamp": "2026-08-31T10:34:00.388339+00:00"
+  },
+  {
+    "cpu_percent": 56.0,
+    "memory_percent": 57.0,
+    "disk_percent": 61.4,
+    "response_time_ms": 246.5,
+    "error_rate": 0.019,
+    "request_rate": 191.6,
+    "timestamp": "2026-08-31T10:34:00.408195+00:00"
+  },
+  {
+    "cpu_percent": 59.8,
+    "memory_percent": 58.1,
+    "disk_percent": 62.7,
+    "response_time_ms": 191.4,
+    "error_rate": 0.003,
+    "request_rate": 109.7,
+    "timestamp": "2026-08-31T10:34:00.430704+00:00"
+  },
+  {
+    "cpu_percent": 71.4,
+    "memory_percent": 40.6,
+    "disk_percent": 63.9,
+    "response_time_ms": 222.3,
+    "error_rate": 0.008,
+    "request_rate": 477.3,
+    "timestamp": "2026-08-31T10:34:00.449918+00:00"
+  },
+  {
+    "cpu_percent": 42.7,
+    "memory_percent": 43.9,
+    "disk_percent": 56.3,
+    "response_time_ms": 233.3,
+    "error_rate": 0.028,
+    "request_rate": 467.6,
+    "timestamp": "2026-08-31T10:34:00.470552+00:00"
+  },
+  {
+    "cpu_percent": 37.5,
+    "memory_percent": 48.5,
+    "disk_percent": 55.0,
+    "response_time_ms": 234.4,
+    "error_rate": 0.033,
+    "request_rate": 462.9,
+    "timestamp": "2026-08-31T10:34:00.491244+00:00"
+  },
+  {
+    "cpu_percent": 58.1,
+    "memory_percent": 60.7,
+    "disk_percent": 61.7,
+    "response_time_ms": 248.4,
+    "error_rate": 0.009,
+    "request_rate": 212.5,
+    "timestamp": "2026-08-31T10:34:00.512162+00:00"
+  },
+  {
+    "cpu_percent": 46.0,
+    "memory_percent": 64.3,
+    "disk_percent": 57.6,
+    "response_time_ms": 102.0,
+    "error_rate": 0.003,
+    "request_rate": 391.3,
+    "timestamp": "2026-08-31T10:34:00.522468+00:00"
+  },
+  {
+    "cpu_percent": 54.9,
+    "memory_percent": 60.7,
+    "disk_percent": 62.5,
+    "response_time_ms": 198.1,
+    "error_rate": 0.03,
+    "request_rate": 143.7,
+    "timestamp": "2026-08-31T10:34:00.554390+00:00"
+  },
+  {
+    "cpu_percent": 66.4,
+    "memory_percent": 45.4,
+    "disk_percent": 56.2,
+    "response_time_ms": 185.0,
+    "error_rate": 0.02,
+    "request_rate": 405.1,
+    "timestamp": "2026-08-31T10:34:00.572161+00:00"
+  },
+  {
+    "cpu_percent": 29.7,
+    "memory_percent": 46.8,
+    "disk_percent": 56.8,
+    "response_time_ms": 149.3,
+    "error_rate": 0.009,
+    "request_rate": 381.6,
+    "timestamp": "2026-08-31T10:34:00.595459+00:00"
+  },
+  {
+    "cpu_percent": 49.6,
+    "memory_percent": 65.3,
+    "disk_percent": 60.2,
+    "response_time_ms": 272.9,
+    "error_rate": 0.01,
+    "request_rate": 130.0,
+    "timestamp": "2026-08-31T10:34:00.612470+00:00"
+  },
+  {
+    "cpu_percent": 16.3,
+    "memory_percent": 40.7,
+    "disk_percent": 61.8,
+    "response_time_ms": 253.0,
+    "error_rate": 0.029,
+    "request_rate": 452.1,
+    "timestamp": "2026-08-31T10:34:00.626917+00:00"
+  },
+  {
+    "cpu_percent": 34.5,
+    "memory_percent": 53.6,
+    "disk_percent": 63.9,
+    "response_time_ms": 117.9,
+    "error_rate": 0.006,
+    "request_rate": 177.6,
+    "timestamp": "2026-08-31T10:34:00.651132+00:00"
+  },
+  {
+    "cpu_percent": 15.6,
+    "memory_percent": 40.9,
+    "disk_percent": 56.5,
+    "response_time_ms": 202.5,
+    "error_rate": 0.023,
+    "request_rate": 165.9,
+    "timestamp": "2026-08-31T10:34:00.670536+00:00"
+  },
+  {
+    "cpu_percent": 20.6,
+    "memory_percent": 50.6,
+    "disk_percent": 65.0,
+    "response_time_ms": 158.8,
+    "error_rate": 0.019,
+    "request_rate": 361.1,
+    "timestamp": "2026-08-31T10:34:00.696803+00:00"
+  },
+  {
+    "cpu_percent": 23.6,
+    "memory_percent": 49.9,
+    "disk_percent": 61.5,
+    "response_time_ms": 348.7,
+    "error_rate": 0.01,
+    "request_rate": 496.1,
+    "timestamp": "2026-08-31T10:34:00.715940+00:00"
+  }
+]

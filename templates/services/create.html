@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Register Microservice — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Register Microservice</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('services.create') }}">
+            <div class="form-group">
+                <label for="name">Service Name</label>
+                <input type="text" id="name" name="name" class="form-control" required placeholder="e.g. Analytics Engine">
+            </div>
+            <div class="form-group">
+                <label for="team">Assigned Team</label>
+                <input type="text" id="team" name="team" class="form-control" value="Backend Platform">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="version">Version</label>
+                    <input type="text" id="version" name="version" class="form-control" value="v1.0.0">
+                </div>
+                <div class="form-group col-6">
+                    <label for="environment">Environment</label>
+                    <select id="environment" name="environment" class="form-control">
+                        <option value="Development">Development</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Staging">Staging</option>
+                        <option value="Production" selected>Production</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Register Service</button>
+                <a href="{{ url_for('services.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

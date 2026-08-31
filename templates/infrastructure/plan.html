@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Generate IaC Plan — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Generate Infrastructure-as-Code Plan</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('infrastructure.plan') }}">
+            <div class="form-group">
+                <label for="environment">Target Environment</label>
+                <select id="environment" name="environment" class="form-control">
+                    <option value="Development">Development</option>
+                    <option value="Testing">Testing</option>
+                    <option value="Staging">Staging</option>
+                    <option value="Production" selected>Production</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="yaml_definition">Infrastructure Manifest (YAML)</label>
+                <textarea id="yaml_definition" name="yaml_definition" class="form-control" rows="10" required>
+resources:
+  - name: prod-cache-node-01
+    type: cache
+    engine: redis
+  - name: prod-queue-cluster
+    type: queue
+    engine: rabbitmq
+</textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Plan Infrastructure Changes</button>
+                <a href="{{ url_for('infrastructure.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

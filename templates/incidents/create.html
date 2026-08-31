@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Report Incident — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Report New Incident</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('incidents.create') }}">
+            <div class="form-group">
+                <label for="title">Incident Title</label>
+                <input type="text" id="title" name="title" class="form-control" required placeholder="e.g. Database connection pool saturation">
+            </div>
+            <div class="form-group">
+                <label for="service">Affected Service</label>
+                <input type="text" id="service" name="service" class="form-control" value="API Gateway">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="environment">Environment</label>
+                    <select id="environment" name="environment" class="form-control">
+                        <option value="Production" selected>Production</option>
+                        <option value="Staging">Staging</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Development">Development</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="severity">Severity Level</label>
+                    <select id="severity" name="severity" class="form-control">
+                        <option value="CRITICAL">CRITICAL</option>
+                        <option value="HIGH" selected>HIGH</option>
+                        <option value="MEDIUM">MEDIUM</option>
+                        <option value="LOW">LOW</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="summary">Summary & Impact Notes</label>
+                <textarea id="summary" name="summary" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger">File Incident Report</button>
+                <a href="{{ url_for('incidents.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

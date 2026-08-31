@@ -1,0 +1,75 @@
+[
+  {
+    "id": "svc_0f42c28ef3dc",
+    "name": "API Gateway",
+    "owner": "admin",
+    "team": "Infrastructure",
+    "version": "v1.2.0",
+    "environment": "Production",
+    "status": "RUNNING",
+    "cpu_usage": 18.4,
+    "memory_usage": 512.0,
+    "request_count": 12400,
+    "error_rate": 0.01,
+    "uptime_percentage": 99.98,
+    "last_deployment": "2026-08-31T10:34:00.250598+00:00",
+    "dependencies": [
+      "Auth Service"
+    ],
+    "created_at": "2026-08-31T10:34:00.250598+00:00"
+  },
+  {
+    "id": "svc_34bcda0778a5",
+    "name": "Auth Service",
+    "owner": "developer",
+    "team": "Security & Identity",
+    "version": "v1.1.2",
+    "environment": "Production",
+    "status": "RUNNING",
+    "cpu_usage": 8.2,
+    "memory_usage": 256.0,
+    "request_count": 8900,
+    "error_rate": 0.005,
+    "uptime_percentage": 99.98,
+    "last_deployment": "2026-08-31T10:34:00.250598+00:00",
+    "dependencies": [],
+    "created_at": "2026-08-31T10:34:00.250598+00:00"
+  },
+  {
+    "id": "svc_d354a1ee6d07",
+    "name": "Payment Service",
+    "owner": "devops",
+    "team": "FinTech Core",
+    "version": "v2.0.1",
+    "environment": "Production",
+    "status": "RUNNING",
+    "cpu_usage": 24.1,
+    "memory_usage": 1024.0,
+    "request_count": 3200,
+    "error_rate": 0.03,
+    "uptime_percentage": 99.98,
+    "last_deployment": "2026-08-31T10:34:00.250598+00:00",
+    "dependencies": [
+      "Auth Service",
+      "Notification Service"
+    ],
+    "created_at": "2026-08-31T10:34:00.250598+00:00"
+  },
+  {
+    "id": "svc_d4e3401af04c",
+    "name": "Notification Service",
+    "owner": "devops",
+    "team": "Product Comms",
+    "version": "v1.0.4",
+    "environment": "Staging",
+    "status": "RUNNING",
+    "cpu_usage": 5.5,
+    "memory_usage": 128.0,
+    "request_count": 1500,
+    "error_rate": 0.0,
+    "uptime_percentage": 99.98,
+    "last_deployment": "2026-08-31T10:34:00.250598+00:00",
+    "dependencies": [],
+    "created_at": "2026-08-31T10:34:00.250598+00:00"
+  }
+]

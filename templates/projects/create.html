@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Create Project — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Create New DevOps Project</h1>
+</div>
+
+<div class="card card-form">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('projects.create') }}">
+            <div class="form-group">
+                <label for="name">Project Name</label>
+                <input type="text" id="name" name="name" class="form-control" required placeholder="e.g. User Auth Microservice">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3" placeholder="Describe the purpose of this project..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="team">Assigned Team</label>
+                <input type="text" id="team" name="team" class="form-control" value="Core DevOps">
+            </div>
+            <div class="form-group">
+                <label for="repository">Git Repository URL</label>
+                <input type="text" id="repository" name="repository" class="form-control" placeholder="git@devopsflow.local:repo.git">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="default_branch">Default Branch</label>
+                    <input type="text" id="default_branch" name="default_branch" class="form-control" value="main">
+                </div>
+                <div class="form-group col-6">
+                    <label for="environment">Target Environment</label>
+                    <select id="environment" name="environment" class="form-control">
+                        <option value="Development">Development</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Staging">Staging</option>
+                        <option value="Production" selected>Production</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create Project</button>
+                <a href="{{ url_for('projects.index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

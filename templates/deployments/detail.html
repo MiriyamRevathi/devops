@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Deployment {{ deployment.id[:8] }} — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Deployment <code>{{ deployment.id[:8] }}</code></h1>
+        <p>Target: <span class="badge badge-info">{{ deployment.environment }}</span> | Version: <strong>{{ deployment.version }}</strong></p>
+    </div>
+    <div class="header-actions">
+        {% if deployment.approval_status == 'PENDING_APPROVAL' %}
+        <form action="{{ url_for('deployments.approve', deployment_id=deployment.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-success">Approve Deployment</button>
+        </form>
+        {% endif %}
+
+        {% if deployment.status == 'SUCCESS' %}
+        <form action="{{ url_for('deployments.rollback', deployment_id=deployment.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger">↺ Rollback Deployment</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Deployment Status Details</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Status:</strong> <span class="badge badge-{% if deployment.status == 'SUCCESS' %}success{% elif deployment.status == 'FAILED' %}danger{% else %}warning{% endif %}">{{ deployment.status }}</span></p>
+        <p><strong>Approval Status:</strong> {{ deployment.approval_status }} {% if deployment.approved_by %}(Approved by {{ deployment.approved_by }}){% endif %}</p>
+        <p><strong>Operator:</strong> {{ deployment.deployed_by }}</p>
+        <p><strong>Created At:</strong> {{ deployment.created_at }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Deployment Logs</h3>
+    </div>
+    <div class="card-body">
+        <div class="terminal-log-viewer">
+            {% for log in deployment.logs %}
+            <div class="log-line">{{ log }}</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}IaC Plan Review {{ plan.id[:8] }} — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>IaC Plan Review: <code>{{ plan.id[:8] }}</code></h1>
+        <p>Target Environment: <span class="badge badge-info">{{ plan.environment }}</span> | Status: <span class="badge badge-{% if plan.status == 'APPLIED' %}success{% else %}warning{% endif %}">{{ plan.status }}</span></p>
+    </div>
+    <div class="header-actions">
+        {% if plan.status != 'APPLIED' %}
+        <form action="{{ url_for('infrastructure.apply_plan', plan_id=plan.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-success">✅ Apply Infrastructure Plan</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Plan Manifest Definition</h3>
+    </div>
+    <div class="card-body">
+        <pre style="background: #272822; color: #f8f8f2; padding: 15px; border-radius: 6px;">{{ plan.yaml_definition }}</pre>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Execution Plan Output Logs</h3>
+    </div>
+    <div class="card-body">
+        <div class="terminal-log-viewer">
+            {% for log in plan.logs %}
+            <div class="log-line">{{ log }}</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Pull Requests - {{ repository.name }} — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Pull Requests: {{ repository.name }}</h1>
+</div>
+
+<div class="card card-form mb-4">
+    <div class="card-header">
+        <h3>Create New Pull Request</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('repositories.pull_requests', repo_id=repository.id) }}">
+            <div class="form-group">
+                <label for="title">PR Title</label>
+                <input type="text" id="title" name="title" class="form-control" required placeholder="feat: add CI execution engine">
+            </div>
+            <div class="form-group">
+                <label for="description">PR Description</label>
+                <textarea id="description" name="description" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="source_branch">Source Branch</label>
+                    <select id="source_branch" name="source_branch" class="form-control">
+                        {% for b in repository.branches if not b.is_default %}
+                        <option value="{{ b.name }}">{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="target_branch">Target Branch</label>
+                    <select id="target_branch" name="target_branch" class="form-control">
+                        {% for b in repository.branches if b.is_default %}
+                        <option value="{{ b.name }}">{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Open Pull Request</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>PR ID</th>
+                    <th>Title</th>
+                    <th>Source -> Target</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pr in repository.pull_requests %}
+                <tr>
+                    <td><code>#{{ pr.id[:8] }}</code></td>
+                    <td><strong>{{ pr.title }}</strong></td>
+                    <td><code>{{ pr.source_branch }}</code> → <code>{{ pr.target_branch }}</code></td>
+                    <td>{{ pr.author }}</td>
+                    <td>
+                        <span class="badge badge-{% if pr.status == 'MERGED' %}success{% elif pr.status == 'OPEN' %}warning{% else %}secondary{% endif %}">
+                            {{ pr.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if pr.status == 'OPEN' %}
+                        <form action="{{ url_for('repositories.merge_pr', repo_id=repository.id, pr_id=pr.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">Merge PR</button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">Merged</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

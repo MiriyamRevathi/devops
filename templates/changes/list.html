@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Change Requests — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Change Advisory Board (CAB) Requests</h1>
+        <p>Managed change request workflow: DRAFT ➔ SUBMITTED ➔ REVIEW ➔ APPROVED ➔ IMPLEMENTING ➔ VERIFIED ➔ CLOSED.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('changes.create') }}" class="btn btn-primary">+ Submit Change Request</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Change ID</th>
+                    <th>Title</th>
+                    <th>Affected Services</th>
+                    <th>Risk</th>
+                    <th>Impact</th>
+                    <th>Requester</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chg in requests %}
+                <tr>
+                    <td><code>{{ chg.id[:8] }}</code></td>
+                    <td><strong><a href="{{ url_for('changes.detail', change_id=chg.id) }}">{{ chg.title }}</a></strong></td>
+                    <td>{{ chg.affected_services }}</td>
+                    <td><span class="badge badge-{% if chg.risk_level == 'HIGH' %}danger{% else %}warning{% endif %}">{{ chg.risk_level }}</span></td>
+                    <td>{{ chg.impact }}</td>
+                    <td>{{ chg.requester }}</td>
+                    <td><span class="badge badge-info">{{ chg.status }}</span></td>
+                    <td><a href="{{ url_for('changes.detail', change_id=chg.id) }}" class="btn-sm">Review</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

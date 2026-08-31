@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Projects — DevOpsFlow{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1>Projects Workspace</h1>
+        <p>Manage software repositories, default branches, and target environments.</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('projects.create') }}" class="btn btn-primary">+ Create Project</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <form method="GET" action="{{ url_for('projects.index') }}" class="filter-form">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search projects..." class="form-control">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="ACTIVE" {% if status == 'ACTIVE' %}selected{% endif %}>ACTIVE</option>
+                <option value="ARCHIVED" {% if status == 'ARCHIVED' %}selected{% endif %}>ARCHIVED</option>
+            </select>
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Team</th>
+                    <th>Owner</th>
+                    <th>Default Branch</th>
+                    <th>Environment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proj in projects %}
+                <tr>
+                    <td><strong><a href="{{ url_for('projects.detail', project_id=proj.id) }}">{{ proj.name }}</a></strong><br><small class="text-muted">{{ proj.description }}</small></td>
+                    <td>{{ proj.team }}</td>
+                    <td>{{ proj.owner }}</td>
+                    <td><code>{{ proj.default_branch }}</code></td>
+                    <td><span class="badge badge-info">{{ proj.environment }}</span></td>
+                    <td><span class="badge badge-{% if proj.status == 'ACTIVE' %}success{% else %}warning{% endif %}">{{ proj.status }}</span></td>
+                    <td>
+                        <a href="{{ url_for('projects.detail', project_id=proj.id) }}" class="btn-sm">View</a>
+                        <a href="{{ url_for('projects.edit', project_id=proj.id) }}" class="btn-sm btn-outline">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
