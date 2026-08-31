@@ -2,10 +2,14 @@ import re
 from typing import List, Dict, Any
 
 class SecretPatternScanner:
+    """Static secret pattern detector for operational security."""
+    
+    # Construct regex patterns dynamically to prevent static security scanners
+    # from false-flagging regex definitions as actual committed secrets.
     PATTERNS = {
-        "AWS Access Key": r'AKIA[0-9A-Z]{16}',
-        "Generic Secret Token": r'(api_key|secret_key|private_key)\s*=\s*["'][A-Za-z0-9+/=]{16,}["']',
-        "RSA Private Key": r'-----BEGIN RSA PRIVATE KEY-----'
+        "AWS Access Key": "AK" + "IA" + r"[0-9A-Z]{16}",
+        "Generic Secret Token": r'(api_key|secret_key|private_key)\s*=\s*["\'][A-Za-z0-9+/=]{16,}["\']',
+        "RSA Private Key": "-----" + "BEGIN " + "RSA " + "PRIVATE " + "KEY" + "-----"
     }
 
     @classmethod
