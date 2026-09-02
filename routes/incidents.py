@@ -1,89 +1,82 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+from core.security import login_required, permission_required, SecurityManager
 from services.incident_service import IncidentService
-from repositories.incident_repo import IncidentRepository
+from services.audit_service import AuditService
+from models.incident import Incident
 
 incidents_bp = Blueprint("incidents", __name__, url_prefix="/incidents")
 
 def get_incident_service() -> IncidentService:
-    repo = IncidentRepository(current_app.config["INCIDENTS_DATA_DIR"])
-    return IncidentService(repo)
+    return IncidentService(current_app.config["INCIDENTS_DATA_DIR"])
 
-@incidents_bp.route("/")
-def index():
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
+def get_audit_service() -> AuditService:
+    return AuditService(current_app.config["AUDIT_DATA_DIR"])
 
+@incidents_bp.route("/", methods=["GET"])
+@login_required
+@permission_required("incident.view")
+def list_incidents():
     service = get_incident_service()
-    incidents = service.repo.get_all()
+    incidents = service.get_all_incidents()
     return render_template("incidents/list.html", incidents=incidents)
 
-@incidents_bp.route("/create", methods=["GET", "POST"])
-def create():
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
+@incidents_bp.route("/<incident_id>", methods=["GET"])
+@login_required
+@permission_required("incident.view")
+def detail(incident_id: str):
+    service = get_incident_service()
+    inc = service.get_incident_by_id(incident_id)
+    if not inc:
+        flash("Incident record not found.", "danger")
+        return redirect(url_for("incidents.list_incidents"))
+    return render_template("incidents/detail.html", incident=inc)
 
+@incidents_bp.route("/create", methods=["GET", "POST"])
+@login_required
+@permission_required("incident.create")
+def create():
     if request.method == "POST":
-        title = request.form.get("title", "").strip()
-        svc_name = request.form.get("service", "API Gateway").strip()
-        environment = request.form.get("environment", "Production").strip()
-        severity = request.form.get("severity", "HIGH").strip()
-        summary = request.form.get("summary", "").strip()
-        assignee = request.form.get("assignee", session.get("username", "admin")).strip()
+        title = SecurityManager.sanitize_input(request.form.get("title", ""))
+        severity = request.form.get("severity", "SEV-2")
+        service_id = request.form.get("service_id", "SVC-API-GW")
+        description = SecurityManager.sanitize_input(request.form.get("description", ""))
+        reporter = session.get("username", "qa")
+
+        if not title:
+            flash("Incident Title is required.", "danger")
+            return render_template("incidents/create.html")
 
         service = get_incident_service()
-        success, inc, msg = service.create_incident(
-            title=title,
-            service=svc_name,
-            environment=environment,
-            severity=severity,
-            summary=summary,
-            assignee=assignee
+        inc = Incident(title=title, severity=severity, service_id=service_id, description=description, reporter=reporter)
+        service.create_incident(inc)
+
+        audit = get_audit_service()
+        audit.record_event(
+            actor=reporter,
+            event_type="INCIDENT_CREATED",
+            resource=f"Incident:{inc.id}",
+            details=f"Reported incident '{title}' with severity '{severity}'."
         )
 
-        if success and inc:
-            flash(msg, "success")
-            return redirect(url_for("incidents.detail", incident_id=inc.id))
-        else:
-            flash(msg, "danger")
+        flash(f"Incident '{title}' reported successfully.", "success")
+        return redirect(url_for("incidents.list_incidents"))
 
     return render_template("incidents/create.html")
 
-@incidents_bp.route("/<incident_id>")
-def detail(incident_id: str):
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
+@incidents_bp.route("/<incident_id>/resolve", methods=["POST"])
+@login_required
+@permission_required("incident.resolve")
+def resolve(incident_id: str):
     service = get_incident_service()
-    inc = service.repo.get_by_id(incident_id)
-    if not inc:
-        flash("Incident not found.", "warning")
-        return redirect(url_for("incidents.index"))
-
-    return render_template("incidents/detail.html", incident=inc)
-
-@incidents_bp.route("/<incident_id>/status", methods=["POST"])
-def update_status(incident_id: str):
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
-    new_status = request.form.get("status", "").strip()
-    notes = request.form.get("notes", "").strip()
-    actor = session.get("username", "admin")
-
-    service = get_incident_service()
-    success, msg = service.update_status(incident_id, new_status, actor=actor, notes=notes)
-    flash(msg, "success" if success else "danger")
-    return redirect(url_for("incidents.detail", incident_id=incident_id))
-
-@incidents_bp.route("/<incident_id>/assign", methods=["POST"])
-def assign(incident_id: str):
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
-    assignee = request.form.get("assignee", "").strip()
-    actor = session.get("username", "admin")
-
-    service = get_incident_service()
-    success, msg = service.assign_incident(incident_id, assignee, actor=actor)
-    flash(msg, "success" if success else "danger")
-    return redirect(url_for("incidents.detail", incident_id=incident_id))
+    resolution = SecurityManager.sanitize_input(request.form.get("resolution", "Resolved by engineer."))
+    inc = service.resolve_incident(incident_id, resolution)
+    if inc:
+        audit = get_audit_service()
+        audit.record_event(
+            actor=session.get("username", "Unknown"),
+            event_type="INCIDENT_RESOLVED",
+            resource=f"Incident:{incident_id}",
+            details=f"Resolved incident '{inc.title}' with resolution '{resolution}'."
+        )
+        flash(f"Incident '{inc.title}' set to RESOLVED.", "success")
+    return redirect(url_for("incidents.list_incidents"))

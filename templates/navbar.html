@@ -1,29 +1,19 @@
-<header class="top-navbar">
+<header class="navbar">
     <div class="navbar-left">
-        <div class="breadcrumb">
-            <span class="breadcrumb-item">DevOpsFlow</span>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-current">Control Center</span>
-        </div>
+        <span class="navbar-title">DevOps Control Center</span>
     </div>
     <div class="navbar-right">
-        <form action="{{ url_for('auth.switch_role') }}" method="POST" class="role-switcher-form">
-            <label for="role-select">Role Demo Switch:</label>
-            <select name="role" id="role-select" onchange="this.form.submit()">
-                <option value="Admin" {% if session.get('role') == 'Admin' %}selected{% endif %}>Admin</option>
-                <option value="DevOps Engineer" {% if session.get('role') == 'DevOps Engineer' %}selected{% endif %}>DevOps Engineer</option>
-                <option value="Developer" {% if session.get('role') == 'Developer' %}selected{% endif %}>Developer</option>
-                <option value="QA Engineer" {% if session.get('role') == 'QA Engineer' %}selected{% endif %}>QA Engineer</option>
-                <option value="Viewer" {% if session.get('role') == 'Viewer' %}selected{% endif %}>Viewer</option>
-            </select>
-        </form>
-
-        <div class="user-profile-menu">
-            <span class="user-avatar">👤</span>
-            <span class="user-name">{{ current_user.username }}</span>
-            <span class="user-badge">{{ current_user.role }}</span>
-            <a href="{{ url_for('auth.profile') }}" class="btn-sm">Profile</a>
-            <a href="{{ url_for('auth.logout') }}" class="btn-sm btn-outline">Logout</a>
+        {% if session.get('user_id') %}
+        <div class="user-menu">
+            <span class="user-info">
+                <strong>{{ current_user.full_name }}</strong> ({{ current_user.username }})
+            </span>
+            <span class="badge badge-role">{{ current_user.role }}</span>
+            <a href="{{ url_for('auth.profile') }}" class="btn btn-sm btn-secondary">Profile</a>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-sm btn-outline-danger">Sign Out</a>
         </div>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-primary">Sign In</a>
+        {% endif %}
     </div>
 </header>

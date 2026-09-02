@@ -38,6 +38,8 @@ class Config:
     AUDIT_DATA_DIR = str(DATA_DIR / "audit")
     USERS_DATA_DIR = str(DATA_DIR / "users")
     RELEASES_DATA_DIR = str(DATA_DIR / "releases")
+    TESTING_DATA_DIR = str(DATA_DIR / "testing")
+    SETTINGS_DATA_DIR = str(DATA_DIR / "settings")
 
     # DORA Metrics Benchmarks (Elite, High, Medium, Low)
     DORA_BENCHMARKS = {
@@ -67,24 +69,100 @@ class Config:
         }
     }
 
-    # Platform Roles & Permissions
+    # All Granular Permissions List
+    ALL_PERMISSIONS = [
+        "project.view", "project.create", "project.edit", "project.delete",
+        "git.view", "git.branch.create", "git.branch.delete", "git.commit",
+        "pull_request.create", "pull_request.review", "pull_request.approve", "pull_request.merge",
+        "pipeline.view", "pipeline.create", "pipeline.edit", "pipeline.run", "pipeline.cancel", "pipeline.retry",
+        "builds.view",
+        "deployment.view", "deployment.create", "deployment.approve", "deployment.rollback", "deployment.production",
+        "infrastructure.view", "infrastructure.plan", "infrastructure.apply", "infrastructure.destroy",
+        "container.view", "container.create", "container.start", "container.stop", "container.restart", "container.remove",
+        "incident.view", "incident.create", "incident.update", "incident.resolve",
+        "security.view", "security.scan",
+        "release.view", "release.create", "release.publish", "release.qa_approve", "release.qa_reject",
+        "testing.view", "testing.run", "testing.validate",
+        "services.view", "environments.view", "logs.view", "alerts.view", "dora.view", "tasks.view", "changes.view",
+        "team.manage", "user.manage", "role.manage", "audit.view", "settings.manage"
+    ]
+
+    # Role Permissions Mapping
     ROLES = {
+        "Admin": ALL_PERMISSIONS,
+
+        "DevOps Engineer": [
+            "project.view", "project.create", "project.edit",
+            "git.view", "git.branch.create", "git.branch.delete", "git.commit",
+            "pull_request.create", "pull_request.review", "pull_request.approve", "pull_request.merge",
+            "pipeline.view", "pipeline.create", "pipeline.edit", "pipeline.run", "pipeline.cancel", "pipeline.retry",
+            "builds.view",
+            "deployment.view", "deployment.create", "deployment.approve", "deployment.rollback", "deployment.production",
+            "infrastructure.view", "infrastructure.plan", "infrastructure.apply", "infrastructure.destroy",
+            "container.view", "container.create", "container.start", "container.stop", "container.restart", "container.remove",
+            "incident.view", "incident.create", "incident.update", "incident.resolve",
+            "security.view", "security.scan",
+            "release.view", "release.create", "release.publish",
+            "services.view", "environments.view", "logs.view", "alerts.view", "dora.view", "tasks.view", "changes.view",
+            "audit.view"
+        ],
+
+        "Developer": [
+            "project.view", "project.create", "project.edit",
+            "git.view", "git.branch.create", "git.commit",
+            "pull_request.create", "pull_request.review",
+            "pipeline.view", "pipeline.run", "pipeline.retry",
+            "builds.view",
+            "deployment.view",
+            "incident.view", "incident.create",
+            "services.view", "environments.view", "logs.view", "dora.view", "tasks.view", "changes.view"
+        ],
+
+        "QA Engineer": [
+            "project.view",
+            "git.view",
+            "pull_request.create", "pull_request.review",
+            "pipeline.view", "pipeline.run", "pipeline.retry",
+            "testing.view", "testing.run", "testing.validate",
+            "deployment.view",
+            "release.view", "release.qa_approve", "release.qa_reject",
+            "incident.view", "incident.create", "incident.update", "incident.resolve",
+            "security.view",
+            "services.view", "environments.view", "logs.view", "dora.view", "tasks.view"
+        ],
+
+        "Viewer": [
+            "project.view", "git.view", "pull_request.create", "pipeline.view", "builds.view",
+            "deployment.view", "release.view", "services.view", "infrastructure.view",
+            "container.view", "incident.view", "security.view", "dora.view",
+            "environments.view", "logs.view", "tasks.view", "audit.view"
+        ]
+    }
+
+    # Role Navigation Items (Exact Prompt Specs)
+    ROLE_NAV = {
         "Admin": [
-            "read", "write", "delete", "execute_pipelines", "deploy",
-            "manage_users", "manage_teams", "approve_changes", "manage_infrastructure"
+            "Dashboard", "Projects", "Git", "Pull Requests", "Pipelines", "Deployments",
+            "Releases", "Services", "Containers", "Infrastructure", "Incidents", "Security",
+            "DORA Metrics", "Teams", "Users", "Audit Logs", "Settings"
         ],
         "DevOps Engineer": [
-            "read", "write", "execute_pipelines", "deploy",
-            "manage_teams", "approve_changes", "manage_infrastructure"
+            "Dashboard", "Projects", "Git", "Pull Requests", "Pipelines", "Deployments",
+            "Releases", "Services", "Containers", "Infrastructure", "Incidents", "Security",
+            "DORA Metrics"
         ],
         "Developer": [
-            "read", "write", "execute_pipelines", "create_pr", "create_change"
+            "Dashboard", "Projects", "Git", "Pull Requests", "Pipelines", "Builds",
+            "Deployments", "Incidents", "DORA Metrics"
         ],
         "QA Engineer": [
-            "read", "write", "execute_pipelines", "trigger_tests", "create_incident"
+            "Dashboard", "Projects", "Git", "Pull Requests", "Pipelines", "Testing",
+            "Deployments", "Releases", "Incidents", "Security", "DORA Metrics"
         ],
         "Viewer": [
-            "read"
+            "Dashboard", "Projects", "Git", "Pull Requests", "Pipelines", "Deployments",
+            "Releases", "Services", "Infrastructure", "Containers", "Incidents", "Security",
+            "DORA Metrics"
         ]
     }
 

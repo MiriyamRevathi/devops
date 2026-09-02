@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Platform Settings - DevOpsFlow{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+    <h1 class="page-title">Platform Settings</h1>
+    <p class="text-muted">Global configuration rules, enforcement policies, and platform parameters.</p>
+</div>
+
+<div class="card max-w-700">
+    <div class="card-header">
+        <h3 class="card-title">Enterprise Governance Configuration</h3>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('settings.update_settings') }}" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Platform Instance Name</label>
+                <input type="text" name="platform_name" class="form-control" value="{{ settings.platform_name or 'DevOpsFlow Enterprise' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Max Concurrent Pipelines</label>
+                <input type="number" name="max_concurrent_pipelines" class="form-control" value="{{ settings.max_concurrent_pipelines or 8 }}" min="1" max="64" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Session Timeout (Hours)</label>
+                <input type="number" name="session_timeout_hours" class="form-control" value="{{ settings.session_timeout_hours or 24 }}" min="1" max="168" required>
+            </div>
+
+            <hr class="my-4">
+            <h4 class="mb-3">Policy Enforcement Rules</h4>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" name="require_pr_review" value="true" class="form-check-input" id="cfg-pr" {% if settings.require_pr_review %}checked{% endif %}>
+                <label class="form-check-label" for="cfg-pr">Require mandatory Pull Request review approval before merging</label>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" name="require_qa_signoff" value="true" class="form-check-input" id="cfg-qa" {% if settings.require_qa_signoff %}checked{% endif %}>
+                <label class="form-check-label" for="cfg-qa">Require QA Signoff approval before Production deployment</label>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" name="auto_rollback_on_failure" value="true" class="form-check-input" id="cfg-rollback" {% if settings.auto_rollback_on_failure %}checked{% endif %}>
+                <label class="form-check-label" for="cfg-rollback">Automatically trigger rollback on production health check failures</label>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Save Platform Settings</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

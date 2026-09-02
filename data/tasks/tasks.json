@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tsk_994db3542272",
+    "title": "Upgrade Kubernetes Cluster Helm charts",
+    "description": "Migrate Helm v2 templates to Helm v3",
+    "assignee": "devops",
+    "priority": "High",
+    "column": "In Progress",
+    "labels": [
+      "devops"
+    ],
+    "due_date": "2026-09-15",
+    "created_at": "2026-09-02T04:18:30.580259+00:00",
+    "updated_at": "2026-09-02T04:18:30.580259+00:00"
+  },
+  {
+    "id": "tsk_43b1bdb7f0f3",
+    "title": "Configure Prometheus alert rules for DB latency",
+    "description": "Set threshold for 95th percentile response time",
+    "assignee": "admin",
+    "priority": "Medium",
+    "column": "Ready",
+    "labels": [
+      "devops"
+    ],
+    "due_date": "2026-09-15",
+    "created_at": "2026-09-02T04:18:30.580259+00:00",
+    "updated_at": "2026-09-02T04:18:30.580259+00:00"
+  },
+  {
+    "id": "tsk_b9059fb2a1fa",
+    "title": "Audit IAM role permissions for CI runner service account",
+    "description": "Enforce least privilege access model",
+    "assignee": "developer",
+    "priority": "High",
+    "column": "Review",
+    "labels": [
+      "devops"
+    ],
+    "due_date": "2026-09-15",
+    "created_at": "2026-09-02T04:18:30.580259+00:00",
+    "updated_at": "2026-09-02T04:18:30.580259+00:00"
+  },
+  {
+    "id": "tsk_9a24a516ea8e",
+    "title": "Implement automated database backup verification script",
+    "description": "Daily dry-run restore tests",
+    "assignee": "devops",
+    "priority": "Low",
+    "column": "Done",
+    "labels": [
+      "devops"
+    ],
+    "due_date": "2026-09-15",
+    "created_at": "2026-09-02T04:18:30.580259+00:00",
+    "updated_at": "2026-09-02T04:18:30.580259+00:00"
+  }
+]

@@ -1,48 +1,118 @@
 {% extends "base.html" %}
 {% block title %}CD Deployments — DevOpsFlow{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <div class="header-titles">
-        <h1>Continuous Deployment Center</h1>
-        <p>Orchestrate multi-environment deployments, approvals, and automated rollbacks.</p>
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Continuous Deployment Center</h1>
+        <p class="text-muted">Orchestrate multi-environment deployments, approvals, and automated rollbacks.</p>
     </div>
     <div class="header-actions">
-        <a href="{{ url_for('deployments.deploy') }}" class="btn btn-primary">🚀 Trigger Deployment</a>
+        {% if has_permission('deployment.create') %}
+        <a href="{{ url_for('deployments.create_deployment') }}" class="btn btn-primary">Trigger Deployment</a>
+        {% endif %}
     </div>
 </div>
 
 <div class="card">
-    <div class="card-body">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Deployment ID</th>
-                    <th>Target Environment</th>
-                    <th>Release Version</th>
-                    <th>Status</th>
-                    <th>Approval</th>
-                    <th>Deployed By</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for dep in deployments %}
-                <tr>
-                    <td><code>{{ dep.id[:8] }}</code></td>
-                    <td><span class="badge badge-info">{{ dep.environment }}</span></td>
-                    <td><strong>{{ dep.version }}</strong></td>
-                    <td>
-                        <span class="badge badge-{% if dep.status == 'SUCCESS' %}success{% elif dep.status == 'FAILED' %}danger{% elif dep.status == 'ROLLED_BACK' %}secondary{% else %}warning{% endif %}">
-                            {{ dep.status }}
-                        </span>
-                    </td>
-                    <td><span class="badge badge-{% if dep.approval_status == 'APPROVED' %}success{% else %}warning{% endif %}">{{ dep.approval_status }}</span></td>
-                    <td>{{ dep.deployed_by }}</td>
-                    <td><a href="{{ url_for('deployments.detail', deployment_id=dep.id) }}" class="btn-sm">Inspect</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Deployment Records ({{ deployments | length }})</h3>
+        <span class="badge badge-info">CD Engine</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Deployment ID</th>
+                        <th>Target Env</th>
+                        <th>Version</th>
+                        <th>Commit</th>
+                        <th>Status</th>
+                        <th>Operator</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dep in deployments %}
+                    <tr>
+                        <td><code>{{ dep.id[:8] }}</code></td>
+                        <td>
+                            <span class="badge badge-{% if dep.environment == 'Production' %}danger{% elif dep.environment == 'Staging' %}warning{% else %}info{% endif %}">
+                                {{ dep.environment }}
+                            </span>
+                        </td>
+                        <td><strong>{{ dep.version }}</strong></td>
+                        <td><code>{{ dep.commit_hash[:7] }}</code></td>
+                        <td>
+                            <span class="badge badge-{% if dep.status == 'SUCCESS' %}success{% elif dep.status == 'FAILED' %}danger{% elif dep.status == 'ROLLED_BACK' %}secondary{% else %}warning{% endif %}">
+                                {{ dep.status }}
+                            </span>
+                        </td>
+                        <td>{{ dep.deployed_by }}</td>
+                        <td class="small text-muted">{{ dep.timestamp[:16] if dep.timestamp else 'N/A' }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('deployments.detail', deployment_id=dep.id) }}" class="btn btn-sm btn-outline-primary">Details</a>
+                                {% if has_permission('deployment.rollback') and (dep.environment != 'Production' or current_user.role in ['Admin', 'DevOps Engineer']) %}
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="openRollbackModal('{{ dep.id }}', '{{ dep.environment }}', '{{ dep.version }}')">
+                                    Rollback
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<!-- Modal: Production & Deployment Rollback Confirmation -->
+<div id="modal-rollback" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm Deployment Rollback</h3>
+            <button class="modal-close" onclick="document.getElementById('modal-rollback').style.display='none'">&times;</button>
+        </div>
+        <form id="form-rollback" action="" method="POST">
+            <div class="modal-body">
+                <div class="alert alert-warning mb-3">
+                    <strong>Warning:</strong> Initiating rollback will revert the application binary and configuration state to the target version.
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Target Environment</label>
+                    <input type="text" id="rb-environment" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Current Version</label>
+                    <input type="text" id="rb-current-version" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Target Rollback Version</label>
+                    <input type="text" name="target_version" class="form-control" required value="1.3.9-previous">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Rollback Justification & Impact</label>
+                    <textarea name="reason" class="form-control" rows="3" required placeholder="Describe reason for rollback (e.g. latency degradation, critical defect)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-rollback').style.display='none'">Cancel</button>
+                <button type="submit" class="btn btn-danger">Confirm Rollback</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openRollbackModal(id, env, version) {
+    document.getElementById('form-rollback').action = '/deployments/' + id + '/rollback';
+    document.getElementById('rb-environment').value = env;
+    document.getElementById('rb-current-version').value = version;
+    document.getElementById('modal-rollback').style.display = 'flex';
+}
+</script>
 {% endblock %}

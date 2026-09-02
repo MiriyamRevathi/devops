@@ -1,0 +1,38 @@
+[
+  {
+    "id": "team_5918f44b20e2",
+    "name": "Core Platform & DevOps",
+    "description": "Infrastructure and DevOps tooling",
+    "lead": "admin",
+    "members": [
+      "admin",
+      "devops"
+    ],
+    "projects": [],
+    "created_at": "2026-09-02T04:18:07.995286+00:00"
+  },
+  {
+    "id": "team_bcd3ca936846",
+    "name": "FinTech Core Services",
+    "description": "Payment and financial processing",
+    "lead": "devops",
+    "members": [
+      "devops",
+      "developer"
+    ],
+    "projects": [],
+    "created_at": "2026-09-02T04:18:07.995286+00:00"
+  },
+  {
+    "id": "team_c27b380359c2",
+    "name": "Security & Identity",
+    "description": "Auth, IAM, and Security governance",
+    "lead": "developer",
+    "members": [
+      "developer",
+      "qa"
+    ],
+    "projects": [],
+    "created_at": "2026-09-02T04:18:07.995286+00:00"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "cnt_f23ab287",
+    "name": "devopsflow-web-prod",
+    "image": "devopsflow/web",
+    "tag": "v1.0.0",
+    "ports": "5000:5000",
+    "status": "RUNNING",
+    "cpu_percent": 4.2,
+    "memory_usage_mb": 210.0,
+    "created_at": "2026-09-02T04:17:28.933850+00:00"
+  },
+  {
+    "id": "cnt_0d282375",
+    "name": "postgres-primary-db",
+    "image": "postgres",
+    "tag": "15-alpine",
+    "ports": "5432:5432",
+    "status": "RUNNING",
+    "cpu_percent": 8.5,
+    "memory_usage_mb": 420.0,
+    "created_at": "2026-09-02T04:17:28.933850+00:00"
+  },
+  {
+    "id": "cnt_d0c4728e",
+    "name": "redis-cache-cluster",
+    "image": "redis",
+    "tag": "7.0",
+    "ports": "6379:6379",
+    "status": "RUNNING",
+    "cpu_percent": 1.1,
+    "memory_usage_mb": 95.0,
+    "created_at": "2026-09-02T04:17:28.933850+00:00"
+  },
+  {
+    "id": "cnt_707558af",
+    "name": "rabbitmq-event-queue",
+    "image": "rabbitmq",
+    "tag": "3.11-management",
+    "ports": "5672:5672",
+    "status": "RUNNING",
+    "cpu_percent": 3.6,
+    "memory_usage_mb": 310.0,
+    "created_at": "2026-09-02T04:17:28.933850+00:00"
+  }
+]

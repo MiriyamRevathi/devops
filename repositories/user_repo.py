@@ -67,13 +67,29 @@ class UserRepository:
     def get_all(self) -> List[User]:
         return [User.from_dict(d) for d in self.store.read_all()]
 
+    def count_admins(self) -> int:
+        all_users = self.get_all()
+        return sum(1 for u in all_users if u.role == "Admin" and u.is_active)
+
     def create(self, user: User) -> User:
         self.store.insert(user.to_dict())
         return user
 
     def update(self, user: User) -> Optional[User]:
+        # Safety rule check: Cannot demote the last remaining active Admin account
+        existing = self.get_by_id(user.id)
+        if existing and existing.role == "Admin" and user.role != "Admin":
+            if self.count_admins() <= 1:
+                raise ValueError("Safety Rule Violation: Cannot demote the last remaining active Admin account.")
+
         updated = self.store.update(user.id, user.to_dict())
         return User.from_dict(updated) if updated else None
 
     def delete(self, user_id: str) -> bool:
+        # Safety rule check: Cannot delete the last remaining active Admin account
+        existing = self.get_by_id(user_id)
+        if existing and existing.role == "Admin":
+            if self.count_admins() <= 1:
+                raise ValueError("Safety Rule Violation: Cannot delete the last remaining active Admin account.")
+
         return self.store.delete(user_id)

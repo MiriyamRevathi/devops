@@ -1,89 +1,54 @@
-# DevOpsFlow — Enterprise Local DevOps Control Center
+# DevOpsFlow — Enterprise DevOps Control Center & RBAC Platform
 
-DevOpsFlow is a complete, production-grade local DevOps lifecycle management platform that allows software developers and DevOps engineers to manage the entire application delivery lifecycle locally without any external cloud service or API dependencies.
-
-## Key Features
-
-1. **Interactive DevOps Control Center Dashboard**: Real-time metrics, active projects, pipeline run histories, production deployment status, microservice health cards, and active incident alerts.
-2. **Local Authentication & RBAC**: Role-based access control (Admin, DevOps Engineer, Developer, QA Engineer, Viewer) with session handling and password hashing.
-3. **Projects Workspace**: Project creation, editing, archiving, team membership, default branch configuration, and search/filtering.
-4. **Git Source Control Simulator**: Branch management, commit history, pull request creation, peer code review, and non-fast-forward merge workflows.
-5. **Interactive CI Pipeline Engine**: Stage builder (Checkout, Install, Lint, Validate, Unit Test, Integration Test, Build, Package, Security Scan, Publish Artifact), status state machine (CREATED ➔ QUEUED ➔ RUNNING ➔ SUCCESS / FAILED), and live log stream output.
-6. **CD & Multi-Environment Deployment System**: Target environments (Development, Testing, Staging, Production), deployment approvals, release versioning, and automated rollbacks.
-7. **Release Management**: Tagged release versions, changelog notes, artifact manifests, and deployment targets.
-8. **Microservice Catalog**: Service discovery, CPU/RAM/Request telemetry, health diagnostics, dependency graph, and restart simulation.
-9. **Safe Container Engine Simulator**: Start, stop, restart, inspect, and remove simulated containers with port bindings and resource tracking without requiring local Docker daemon.
-10. **Infrastructure-as-Code (IaC) Engine**: Terraform-style `PLAN ➔ REVIEW ➔ APPLY ➔ DESTROY` workflow with YAML syntax parser and resource state tracker.
-11. **System Monitoring & Telemetry**: Telemetry metrics collection via `psutil`, `numpy`, and `pandas`.
-12. **DORA 4 Key DevOps Metrics**: Automated calculation of Deployment Frequency, Lead Time for Changes, Change Failure Rate (CFR), and Mean Time to Recovery (MTTR) with performance ratings.
-13. **Centralized Log Viewer**: Structured log aggregator with multi-level severity filtering (`INFO`, `WARNING`, `ERROR`, `DEBUG`) and trace ID tracking.
-14. **Incident Management & SLA Tracker**: Incident filing, severity levels (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), status workflows (`OPEN` ➔ `INVESTIGATING` ➔ `MITIGATING` ➔ `RESOLVED` ➔ `CLOSED`), and timeline events.
-15. **Automated Alert Rules**: Threshold-based alert rules engine (`CPU > 80%`, `Memory > 85%`, `Error Rate > 5%`).
-16. **Local Security Dashboard**: Dependency scanner, misconfiguration audit, and secret leak pattern detection.
-17. **Artifact Registry**: Local package store for wheels, tars, zips, and container image metadata.
-18. **Engineering Teams & RBAC**: Team management and user role assignments.
-19. **DevOps Task Kanban Board**: Task cards organized in `Backlog`, `Ready`, `In Progress`, `Review`, and `Done` columns with status movement.
-20. **Change Request Management (CAB)**: Managed change advisory board workflow (`DRAFT` ➔ `SUBMITTED` ➔ `REVIEW` ➔ `APPROVED` ➔ `IMPLEMENTING` ➔ `VERIFIED` ➔ `CLOSED`) with risk & impact evaluation.
-21. **Immutable Audit Trail Registry**: Searchable system audit event history tracking every login, pipeline execution, deployment, and infrastructure change.
+DevOpsFlow is a production-grade enterprise DevOps Control Center featuring a granular, function-based Role-Based Access Control (RBAC) authorization engine, multi-environment continuous deployment orchestrator, local container simulator, infrastructure-as-code planner, DORA metrics calculator, and centralized audit logging.
 
 ---
 
-## Architecture & Technology Stack
+## 🔒 Role-Based Access Control (RBAC) System
 
-- **Backend**: Python 3.10+, Flask Application Factory, Werkzeug, Jinja2, pandas, numpy, matplotlib, psutil, PyYAML.
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript (responsive design, no external Node.js/React dependencies).
-- **Persistence**: Thread-safe file-based JSON storage engines with locking and index search.
-- **Testing**: pytest unit and integration test suite.
+DevOpsFlow defines 45+ granular permissions enforced strictly at the backend route level.
 
----
+### Demo User Accounts
 
-## Local Installation & Quick Start
-
-1. **Clone or Navigate to Project Directory**:
-   ```bash
-   cd C:\Users\miriy\.gemini\antigravity\scratch\devopsflow
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run Application**:
-   ```bash
-   python app.py
-   ```
-
-4. **Access Platform**:
-   Open browser at: `http://127.0.0.1:5000`
+| Role | Username | Password | Access & Responsibilities |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin` | `admin123` | Full system access. Manages users, roles, teams, global settings, deployments, infrastructure, audit logs. |
+| **DevOps Engineer** | `devops` | `devops123` | Operational lead. Manages CI/CD pipelines, deployments, releases, infrastructure (plan/apply/destroy), containers, incidents, security scans. |
+| **Developer** | `developer` | `dev123` | Development engineer. Manages projects, branches, commits, PRs, dev builds, incidents. (Restricted from Production deployments & Infra apply). |
+| **QA Engineer** | `qa` | `qa123` | Quality lead. Dedicated Testing Dashboard (`/testing`), regression runs, PR reviews, testing/staging validation, defect management. (Restricted from Production deployments). |
+| **Viewer** | `viewer` | `viewer123` | Completely read-only across all dashboards, metrics, logs, deployments, and resources. (All mutations restricted). |
 
 ---
 
-## Demo User Credentials
+## 🚀 Deterministic Local Installation & Run Commands
 
-| Username | Password | Role |
-| :--- | :--- | :--- |
-| `admin` | `admin123` | Admin |
-| `devops` | `devops123` | DevOps Engineer |
-| `developer` | `dev123` | Developer |
-| `qa` | `qa123` | QA Engineer |
-| `viewer` | `viewer123` | Viewer |
+### Prerequisites
+- Python 3.10+
+- Git
 
----
-
-## Running Automated Tests
-
-Run full test suite with `pytest`:
+### Installation Steps
 ```bash
+# 1. Clone repository
+git clone https://github.com/MiriyamRevathi/devops.git
+cd devops
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run test suite
 pytest
+
+# 4. Start local platform server
+python app.py
 ```
+
+The application will launch on **http://127.0.0.1:5007**.
 
 ---
 
-## Docker Deployment
-
-Build and run via Docker:
-```bash
-docker build -t devopsflow .
-docker run -p 5000:5000 devopsflow
-```
+## 🛠️ Security & Safety Rules Enforced
+- **Production Protection**: Production deployments and production rollbacks are strictly restricted to `Admin` and `DevOps Engineer` roles.
+- **Admin Safety Rules**: The system prevents deleting or demoting the last active `Admin` account or self-demoting the logged-in admin.
+- **Backend Route Enforcement**: Accessing restricted URLs directly returns a HTTP 403 Forbidden page.
+- **Icon-Free Design System**: Clean typography, status badges, data tables, and modal dialogs with zero decorative icons or emojis.
+- **Audit Logging**: Every mutation event is recorded in the system audit trail.

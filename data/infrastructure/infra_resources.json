@@ -1,0 +1,56 @@
+[
+  {
+    "id": "res_39580ea97558",
+    "name": "k8s-master-node-01",
+    "resource_type": "server",
+    "provider": "local-cloud",
+    "environment": "Production",
+    "config": {
+      "cpus": 8,
+      "memory_gb": 32
+    },
+    "status": "APPLIED",
+    "created_at": "2026-09-02T04:17:32.745923+00:00",
+    "updated_at": "2026-09-02T04:17:32.745923+00:00"
+  },
+  {
+    "id": "res_5c3444bc8501",
+    "name": "postgres-db-cluster",
+    "resource_type": "database",
+    "provider": "local-cloud",
+    "environment": "Production",
+    "config": {
+      "engine": "postgresql",
+      "storage_gb": 500
+    },
+    "status": "APPLIED",
+    "created_at": "2026-09-02T04:17:32.745923+00:00",
+    "updated_at": "2026-09-02T04:17:32.745923+00:00"
+  },
+  {
+    "id": "res_05707406d0ad",
+    "name": "redis-session-store",
+    "resource_type": "cache",
+    "provider": "local-cloud",
+    "environment": "Production",
+    "config": {
+      "memory_gb": 8
+    },
+    "status": "APPLIED",
+    "created_at": "2026-09-02T04:17:32.745923+00:00",
+    "updated_at": "2026-09-02T04:17:32.745923+00:00"
+  },
+  {
+    "id": "res_df49780efdb3",
+    "name": "main-load-balancer",
+    "resource_type": "load_balancer",
+    "provider": "local-cloud",
+    "environment": "Production",
+    "config": {
+      "scheme": "internet-facing"
+    },
+    "status": "APPLIED",
+    "created_at": "2026-09-02T04:17:32.745923+00:00",
+    "updated_at": "2026-09-02T04:17:32.745923+00:00"
+  }
+]

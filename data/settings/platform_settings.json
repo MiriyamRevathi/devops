@@ -1,0 +1,14 @@
+[
+  {
+    "id": "global_config",
+    "platform_name": "DevOpsFlow Enterprise",
+    "environment_mode": "Production-Ready",
+    "require_pr_review": true,
+    "require_qa_signoff": true,
+    "auto_rollback_on_failure": true,
+    "max_concurrent_pipelines": 8,
+    "session_timeout_hours": 24,
+    "updated_by": "admin",
+    "updated_at": "2026-09-02T05:56:48.183952+00:00"
+  }
+]

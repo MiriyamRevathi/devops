@@ -1,0 +1,47 @@
+[
+  {
+    "id": "log_7555e94d6190",
+    "service": "API Gateway",
+    "environment": "Production",
+    "message": "HTTP 200 GET /api/v1/health",
+    "severity": "INFO",
+    "trace_id": "trc_5d50c2",
+    "timestamp": "2026-09-02T04:18:14.022046+00:00"
+  },
+  {
+    "id": "log_aee2337ba641",
+    "service": "Auth Service",
+    "environment": "Production",
+    "message": "JWT verification cache hit ratio 98.4%",
+    "severity": "INFO",
+    "trace_id": "trc_471cf8",
+    "timestamp": "2026-09-02T04:18:14.022046+00:00"
+  },
+  {
+    "id": "log_2dc93d85e779",
+    "service": "Payment Service",
+    "environment": "Production",
+    "message": "Database pool latency spike > 120ms",
+    "severity": "WARNING",
+    "trace_id": "trc_906312",
+    "timestamp": "2026-09-02T04:18:14.022046+00:00"
+  },
+  {
+    "id": "log_b6c3921d37cc",
+    "service": "Payment Service",
+    "environment": "Production",
+    "message": "Connection timeout connecting to DB replica 2",
+    "severity": "ERROR",
+    "trace_id": "trc_695a92",
+    "timestamp": "2026-09-02T04:18:14.022046+00:00"
+  },
+  {
+    "id": "log_e4313dd01f98",
+    "service": "Notification Service",
+    "environment": "Staging",
+    "message": "SMTP debug connection established",
+    "severity": "DEBUG",
+    "trace_id": "trc_4ecff5",
+    "timestamp": "2026-09-02T04:18:14.022046+00:00"
+  }
+]

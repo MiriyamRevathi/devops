@@ -1,83 +1,131 @@
 <aside class="sidebar">
     <div class="sidebar-brand">
-        <div class="brand-logo">⚙️</div>
         <div class="brand-text">
             <h2>DevOpsFlow</h2>
-            <span class="brand-tag">ENTERPRISE v1.0</span>
+            <span class="brand-tag">CONTROL CENTER</span>
         </div>
     </div>
+
+    <div class="sidebar-user-role">
+        <span class="role-label">ACTIVE ROLE</span>
+        <span class="role-badge role-badge-{{ current_user.role | lower | replace(' ', '-') }}">{{ current_user.role }}</span>
+    </div>
+
     <nav class="sidebar-menu">
-        <div class="menu-label">OVERVIEW</div>
-        <a href="{{ url_for('dashboard.index') }}" class="menu-item">
-            <span class="icon">📊</span> Dashboard
-        </a>
-        <a href="{{ url_for('analytics.dora') }}" class="menu-item">
-            <span class="icon">📈</span> DORA Metrics
-        </a>
+        <div class="menu-label">NAVIGATION</div>
 
-        <div class="menu-label">DEVELOPMENT & CI/CD</div>
-        <a href="{{ url_for('projects.index') }}" class="menu-item">
-            <span class="icon">📁</span> Projects
+        {% if "Dashboard" in allowed_nav %}
+        <a href="{{ url_for('dashboard.index') }}" class="menu-item {% if request.endpoint == 'dashboard.index' %}active{% endif %}">
+            Dashboard
         </a>
-        <a href="{{ url_for('repositories.index') }}" class="menu-item">
-            <span class="icon">🌿</span> Source Repos
-        </a>
-        <a href="{{ url_for('pipelines.index') }}" class="menu-item">
-            <span class="icon">🚀</span> CI Pipelines
-        </a>
-        <a href="{{ url_for('deployments.index') }}" class="menu-item">
-            <span class="icon">📦</span> Deployments
-        </a>
-        <a href="{{ url_for('releases.index') }}" class="menu-item">
-            <span class="icon">🏷️</span> Releases
-        </a>
-        <a href="{{ url_for('artifacts.index') }}" class="menu-item">
-            <span class="icon">🗄️</span> Artifact Registry
-        </a>
+        {% endif %}
 
-        <div class="menu-label">INFRASTRUCTURE & OPS</div>
-        <a href="{{ url_for('environments.index') }}" class="menu-item">
-            <span class="icon">🌐</span> Environments
+        {% if "Projects" in allowed_nav %}
+        <a href="{{ url_for('projects.list_projects') }}" class="menu-item {% if request.endpoint and 'projects' in request.endpoint %}active{% endif %}">
+            Projects
         </a>
-        <a href="{{ url_for('services.index') }}" class="menu-item">
-            <span class="icon">⚡</span> Service Catalog
-        </a>
-        <a href="{{ url_for('containers.index') }}" class="menu-item">
-            <span class="icon">🐳</span> Container Engine
-        </a>
-        <a href="{{ url_for('infrastructure.index') }}" class="menu-item">
-            <span class="icon">🏗️</span> Infrastructure (IaC)
-        </a>
+        {% endif %}
 
-        <div class="menu-label">OBSERVABILITY & GOVERNANCE</div>
-        <a href="{{ url_for('monitoring.index') }}" class="menu-item">
-            <span class="icon">🩺</span> System Monitoring
+        {% if "Git" in allowed_nav %}
+        <a href="{{ url_for('repositories.list_repositories') }}" class="menu-item {% if request.endpoint and 'repositories' in request.endpoint and 'pull_requests' not in request.endpoint %}active{% endif %}">
+            Git Repositories
         </a>
-        <a href="{{ url_for('logs.viewer') }}" class="menu-item">
-            <span class="icon">📜</span> Centralized Logs
-        </a>
-        <a href="{{ url_for('incidents.index') }}" class="menu-item">
-            <span class="icon">🚨</span> Incidents
-        </a>
-        <a href="{{ url_for('alerts.index') }}" class="menu-item">
-            <span class="icon">🔔</span> Alert Rules
-        </a>
-        <a href="{{ url_for('security.index') }}" class="menu-item">
-            <span class="icon">🛡️</span> Security Dashboard
-        </a>
+        {% endif %}
 
-        <div class="menu-label">ORGANIZATION</div>
-        <a href="{{ url_for('teams.index') }}" class="menu-item">
-            <span class="icon">👥</span> Teams & Members
+        {% if "Pull Requests" in allowed_nav %}
+        <a href="{{ url_for('repositories.pull_requests') }}" class="menu-item {% if request.endpoint and 'pull_requests' in request.endpoint %}active{% endif %}">
+            Pull Requests
         </a>
-        <a href="{{ url_for('tasks.index') }}" class="menu-item">
-            <span class="icon">📋</span> Task Board (Kanban)
+        {% endif %}
+
+        {% if "Pipelines" in allowed_nav %}
+        <a href="{{ url_for('pipelines.index') }}" class="menu-item {% if request.endpoint and 'pipelines' in request.endpoint and 'builds' not in request.endpoint %}active{% endif %}">
+            CI/CD Pipelines
         </a>
-        <a href="{{ url_for('changes.index') }}" class="menu-item">
-            <span class="icon">📝</span> Change Requests (CAB)
+        {% endif %}
+
+        {% if "Builds" in allowed_nav %}
+        <a href="{{ url_for('pipelines.builds') }}" class="menu-item {% if request.endpoint and 'builds' in request.endpoint %}active{% endif %}">
+            Build Runs
         </a>
-        <a href="{{ url_for('audit.index') }}" class="menu-item">
-            <span class="icon">🔒</span> Audit Trail
+        {% endif %}
+
+        {% if "Testing" in allowed_nav %}
+        <a href="{{ url_for('testing.index') }}" class="menu-item {% if request.endpoint and 'testing' in request.endpoint %}active{% endif %}">
+            Testing & QA
         </a>
+        {% endif %}
+
+        {% if "Deployments" in allowed_nav %}
+        <a href="{{ url_for('deployments.list_deployments') }}" class="menu-item {% if request.endpoint and 'deployments' in request.endpoint %}active{% endif %}">
+            Deployments
+        </a>
+        {% endif %}
+
+        {% if "Releases" in allowed_nav %}
+        <a href="{{ url_for('releases.index') }}" class="menu-item {% if request.endpoint and 'releases' in request.endpoint %}active{% endif %}">
+            Releases
+        </a>
+        {% endif %}
+
+        {% if "Services" in allowed_nav %}
+        <a href="{{ url_for('services.index') }}" class="menu-item {% if request.endpoint and 'services' in request.endpoint %}active{% endif %}">
+            Service Catalog
+        </a>
+        {% endif %}
+
+        {% if "Containers" in allowed_nav %}
+        <a href="{{ url_for('containers.list_containers') }}" class="menu-item {% if request.endpoint and 'containers' in request.endpoint %}active{% endif %}">
+            Containers
+        </a>
+        {% endif %}
+
+        {% if "Infrastructure" in allowed_nav %}
+        <a href="{{ url_for('infrastructure.list_plans') }}" class="menu-item {% if request.endpoint and 'infrastructure' in request.endpoint %}active{% endif %}">
+            Infrastructure (IaC)
+        </a>
+        {% endif %}
+
+        {% if "Incidents" in allowed_nav %}
+        <a href="{{ url_for('incidents.list_incidents') }}" class="menu-item {% if request.endpoint and 'incidents' in request.endpoint %}active{% endif %}">
+            Incidents
+        </a>
+        {% endif %}
+
+        {% if "Security" in allowed_nav %}
+        <a href="{{ url_for('security.index') }}" class="menu-item {% if request.endpoint and 'security' in request.endpoint %}active{% endif %}">
+            Security Dashboard
+        </a>
+        {% endif %}
+
+        {% if "DORA Metrics" in allowed_nav %}
+        <a href="{{ url_for('analytics.dora') }}" class="menu-item {% if request.endpoint and ('analytics' in request.endpoint or 'monitoring' in request.endpoint) %}active{% endif %}">
+            DORA Metrics
+        </a>
+        {% endif %}
+
+        {% if "Teams" in allowed_nav %}
+        <a href="{{ url_for('teams.list_teams') }}" class="menu-item {% if request.endpoint and 'teams' in request.endpoint %}active{% endif %}">
+            Teams & Members
+        </a>
+        {% endif %}
+
+        {% if "Users" in allowed_nav %}
+        <a href="{{ url_for('users.list_users') }}" class="menu-item {% if request.endpoint and 'users' in request.endpoint %}active{% endif %}">
+            User Management
+        </a>
+        {% endif %}
+
+        {% if "Audit Logs" in allowed_nav %}
+        <a href="{{ url_for('audit.list_logs') }}" class="menu-item {% if request.endpoint and 'audit' in request.endpoint %}active{% endif %}">
+            Audit Logs
+        </a>
+        {% endif %}
+
+        {% if "Settings" in allowed_nav %}
+        <a href="{{ url_for('settings.index') }}" class="menu-item {% if request.endpoint and 'settings' in request.endpoint %}active{% endif %}">
+            Platform Settings
+        </a>
+        {% endif %}
     </nav>
 </aside>
