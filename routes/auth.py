@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from core.security import SecurityManager, login_required
 from repositories.user_repo import UserRepository
 from services.audit_service import AuditService
+from models.user import User
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -61,6 +62,52 @@ def login():
             flash("Invalid username or password.", "danger")
 
     return render_template("auth/login.html")
+
+@auth_bp.route("/register", methods=["GET", "POST"])
+def register():
+    if "user_id" in session:
+        return redirect(url_for("dashboard.index"))
+
+    if request.method == "POST":
+        username = SecurityManager.sanitize_input(request.form.get("username", ""))
+        email = SecurityManager.sanitize_input(request.form.get("email", ""))
+        password = request.form.get("password", "")
+        full_name = SecurityManager.sanitize_input(request.form.get("full_name", "")) or username.capitalize()
+
+        if not username or not email or not password:
+            flash("Username, email, and password are required.", "danger")
+            return render_template("auth/register.html")
+
+        repo = get_user_repo()
+        if repo.get_by_username(username):
+            flash(f"Username '{username}' is already taken.", "danger")
+            return render_template("auth/register.html")
+
+        if repo.get_by_email(email):
+            flash(f"Email '{email}' is already registered.", "danger")
+            return render_template("auth/register.html")
+
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=SecurityManager.hash_password(password),
+            role="Developer",
+            full_name=full_name
+        )
+        repo.create(new_user)
+
+        audit = get_audit_service()
+        audit.record_event(
+            actor=username,
+            event_type="USER_REGISTERED",
+            resource=f"User:{username}",
+            details=f"User '{username}' registered with role 'Developer'."
+        )
+
+        flash("Registration successful! Please sign in with your credentials.", "success")
+        return redirect(url_for("auth.login"))
+
+    return render_template("auth/register.html")
 
 @auth_bp.route("/logout", methods=["GET", "POST"])
 def logout():
