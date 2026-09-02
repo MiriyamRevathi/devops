@@ -6,8 +6,11 @@ from core.events import EventBus
 class LogService:
     """Centralized Log Management Service."""
 
-    def __init__(self, repository: LogRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = LogRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def log(
         self,

@@ -8,8 +8,11 @@ from core.events import EventBus
 class IaCEngine:
     """Infrastructure-as-Code Plan -> Review -> Apply -> Destroy Execution Engine."""
 
-    def __init__(self, repository: InfrastructureRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = InfrastructureRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_plan(
         self,

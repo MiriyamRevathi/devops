@@ -8,8 +8,11 @@ from core.events import EventBus
 class RepositoryService:
     """Service handling simulated Git operations, branches, commits, PRs, and merge workflow."""
 
-    def __init__(self, repository: SourceControlRepository):
-        self.repo_store = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo_store = SourceControlRepository(repository_or_dir)
+        else:
+            self.repo_store = repository_or_dir
 
     def create_repository(self, name: str, project_id: str) -> GitRepository:
         initial_commit = Commit(

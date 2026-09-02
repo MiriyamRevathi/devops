@@ -8,8 +8,11 @@ from core.events import EventBus
 class EnvironmentService:
     """Business logic for target deployment environment management."""
 
-    def __init__(self, repository: EnvironmentRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = EnvironmentRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def list_environments(self) -> List[Environment]:
         return self.repo.get_all()

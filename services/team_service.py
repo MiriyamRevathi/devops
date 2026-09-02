@@ -6,8 +6,11 @@ from core.events import EventBus
 class TeamService:
     """Team management service."""
 
-    def __init__(self, repository: TeamRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = TeamRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_team(self, name: str, description: str, lead: str) -> Tuple[bool, Optional[Team], str]:
         if not name:

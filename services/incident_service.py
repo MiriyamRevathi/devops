@@ -7,8 +7,11 @@ from core.events import EventBus
 class IncidentService:
     """Incident Response Lifecycle Engine."""
 
-    def __init__(self, repository: IncidentRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = IncidentRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_incident(
         self,

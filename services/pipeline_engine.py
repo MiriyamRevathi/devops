@@ -9,8 +9,11 @@ from core.events import EventBus
 class PipelineEngine:
     """CI/CD Pipeline Builder and Execution Engine."""
 
-    def __init__(self, repository: PipelineRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = PipelineRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_pipeline(
         self,

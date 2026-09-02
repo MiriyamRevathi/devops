@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from repositories.audit_repo import AuditRepository
 from models.audit import AuditEvent
 from core.events import EventBus
@@ -6,8 +6,11 @@ from core.events import EventBus
 class AuditService:
     """System-wide Audit Trail Service listening to EventBus events."""
 
-    def __init__(self, repository: AuditRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir: Union[AuditRepository, str]):
+        if isinstance(repository_or_dir, str):
+            self.repo = AuditRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
         self._register_event_bus_listeners()
 
     def _register_event_bus_listeners(self) -> None:

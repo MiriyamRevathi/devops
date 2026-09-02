@@ -8,8 +8,11 @@ from core.events import EventBus
 class AlertService:
     """Alert Rules Management and Automated Trigger Evaluation Engine."""
 
-    def __init__(self, repository: AlertRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = AlertRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_rule(
         self,

@@ -9,8 +9,11 @@ from core.events import EventBus
 class DeploymentService:
     """CD Deployment Engine and Release Lifecycle Orchestrator."""
 
-    def __init__(self, repository: DeploymentRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = DeploymentRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def trigger_deployment(
         self,

@@ -8,8 +8,11 @@ from core.events import EventBus
 class ProjectService:
     """Business logic for DevOps Project management lifecycle."""
 
-    def __init__(self, repository: ProjectRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = ProjectRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_project(
         self,

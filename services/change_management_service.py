@@ -7,8 +7,11 @@ from core.events import EventBus
 class ChangeManagementService:
     """Change Advisory Board (CAB) Workflow Engine."""
 
-    def __init__(self, repository: ChangeRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = ChangeRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_change_request(
         self,

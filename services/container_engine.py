@@ -7,8 +7,11 @@ from core.events import EventBus
 class ContainerEngine:
     """Safe local container lifecycle simulator engine."""
 
-    def __init__(self, repository: ContainerRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = ContainerRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def start_container(self, container_id: str) -> Tuple[bool, str]:
         cnt = self.repo.get_by_id(container_id)

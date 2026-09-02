@@ -7,8 +7,11 @@ from core.events import EventBus
 class ArtifactService:
     """Artifact Registry Manager Service."""
 
-    def __init__(self, repository: ArtifactRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = ArtifactRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def register_artifact(
         self,

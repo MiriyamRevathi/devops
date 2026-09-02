@@ -8,8 +8,11 @@ from core.events import EventBus
 class ServiceCatalogService:
     """Service catalog management and simulated lifecycle operation engine."""
 
-    def __init__(self, repository: ServiceRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = ServiceRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def create_service(
         self,

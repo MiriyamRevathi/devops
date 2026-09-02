@@ -10,8 +10,11 @@ from core.events import EventBus
 class AuthService:
     """Authentication and Role-Based Access Control (RBAC) service engine."""
 
-    def __init__(self, user_repository: UserRepository):
-        self.repo = user_repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = UserRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def authenticate(self, username: str, password: str) -> Tuple[bool, Optional[User], str]:
         if not username or not password:

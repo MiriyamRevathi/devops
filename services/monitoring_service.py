@@ -10,8 +10,11 @@ from utils.helpers import get_utc_now_iso
 class MonitoringService:
     """System Monitoring collector & DORA Analytics Engine."""
 
-    def __init__(self, repository: MonitoringRepository):
-        self.repo = repository
+    def __init__(self, repository_or_dir):
+        if isinstance(repository_or_dir, str):
+            self.repo = MonitoringRepository(repository_or_dir)
+        else:
+            self.repo = repository_or_dir
 
     def collect_current_sample(self) -> MetricSample:
         try:
