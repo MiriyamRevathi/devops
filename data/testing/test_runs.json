@@ -1,0 +1,47 @@
+[
+  {
+    "id": "tr_81141998586d",
+    "name": "Regression Test Suite v1.4",
+    "suite_type": "Regression",
+    "environment": "Testing",
+    "total_tests": 128,
+    "passed_tests": 126,
+    "failed_tests": 2,
+    "skipped_tests": 0,
+    "pass_rate": 98.44,
+    "status": "PASSED",
+    "validation_status": "VALIDATED",
+    "executed_by": "qa",
+    "created_at": "2026-09-02T05:56:49.619124+00:00"
+  },
+  {
+    "id": "tr_be1f2b995d5b",
+    "name": "Integration & API Gate Test",
+    "suite_type": "Integration",
+    "environment": "Staging",
+    "total_tests": 64,
+    "passed_tests": 64,
+    "failed_tests": 0,
+    "skipped_tests": 0,
+    "pass_rate": 100.0,
+    "status": "PASSED",
+    "validation_status": "VALIDATED",
+    "executed_by": "qa",
+    "created_at": "2026-09-02T05:56:49.619124+00:00"
+  },
+  {
+    "id": "tr_4771d3e2d67d",
+    "name": "Security & Penetration Smoke Test",
+    "suite_type": "Security",
+    "environment": "Testing",
+    "total_tests": 32,
+    "passed_tests": 30,
+    "failed_tests": 2,
+    "skipped_tests": 0,
+    "pass_rate": 93.75,
+    "status": "FAILED",
+    "validation_status": "REJECTED",
+    "executed_by": "qa",
+    "created_at": "2026-09-02T05:56:49.619124+00:00"
+  }
+]

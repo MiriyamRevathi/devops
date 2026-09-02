@@ -1,0 +1,47 @@
+[
+  {
+    "id": "aud_6ebbbecc0476",
+    "event_type": "user_login",
+    "actor": "admin",
+    "resource": "AuthService",
+    "details": "Admin user logged in successfully",
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-09-02T04:18:39.692414+00:00"
+  },
+  {
+    "id": "aud_3bd3df56a67b",
+    "event_type": "project_created",
+    "actor": "admin",
+    "resource": "ProjectRepository",
+    "details": "Created project 'DevOpsFlow Platform'",
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-09-02T04:18:39.692414+00:00"
+  },
+  {
+    "id": "aud_4d27fb151db1",
+    "event_type": "pipeline_executed",
+    "actor": "devops",
+    "resource": "PipelineEngine",
+    "details": "Executed pipeline run #1 on branch main",
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-09-02T04:18:39.692414+00:00"
+  },
+  {
+    "id": "aud_2a94f0c0d979",
+    "event_type": "deployment_completed",
+    "actor": "devops",
+    "resource": "DeploymentService",
+    "details": "Deployed version v1.0.0 to Production",
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-09-02T04:18:39.692414+00:00"
+  },
+  {
+    "id": "aud_0a25fe5a36dd",
+    "event_type": "user_logged_in",
+    "actor": "devops",
+    "resource": "system",
+    "details": "Event 'user_logged_in' published with parameters: {'user_id': 'usr_8e3081b9a78b', 'username': 'devops'}",
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-09-02T04:19:04.731534+00:00"
+  }
+]

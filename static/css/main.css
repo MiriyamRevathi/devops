@@ -60,24 +60,37 @@ body.devopsflow-body {
     padding: 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
     border-bottom: 1px solid #1e293b;
-}
-
-.brand-logo {
-    font-size: 24px;
 }
 
 .brand-text h2 {
     color: #ffffff;
     font-size: 18px;
     font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .brand-tag {
     font-size: 10px;
     color: #38bdf8;
     letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.sidebar-user-role {
+    padding: 12px 20px;
+    background-color: #1e293b;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-user-role .role-label {
+    font-size: 10px;
+    color: #64748b;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .sidebar-menu {
@@ -96,22 +109,23 @@ body.devopsflow-body {
 .menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
+    padding: 10px 14px;
     color: #94a3b8;
     text-decoration: none;
     border-radius: 6px;
     font-size: 14px;
+    font-weight: 500;
     margin-bottom: 2px;
 }
 
 .menu-item:hover, .menu-item.active {
     background-color: #1e293b;
     color: #ffffff;
+    border-left: 3px solid #38bdf8;
 }
 
 /* Navbar Header */
-.top-navbar {
+.navbar {
     height: 60px;
     background-color: #ffffff;
     border-bottom: 1px solid var(--border);
@@ -121,40 +135,22 @@ body.devopsflow-body {
     padding: 0 24px;
 }
 
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-}
-
-.breadcrumb-separator {
-    color: var(--text-muted);
+.navbar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
 }
 
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
 }
 
-.role-switcher-form {
+.user-menu {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
-}
-
-.role-switcher-form select {
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-}
-
-.user-profile-menu {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-size: 14px;
 }
 
@@ -166,21 +162,37 @@ body.devopsflow-body {
     margin-bottom: 24px;
 }
 
-.page-header h1 {
+.page-title {
     font-size: 24px;
     font-weight: 700;
     color: var(--text-main);
 }
 
-.page-header p {
-    font-size: 14px;
-    color: var(--text-muted);
+/* Grids & Cards */
+.grid { display: grid; gap: 20px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 992px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
 
-.header-actions {
+.metric-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
 }
+
+.metric-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+.metric-value { font-size: 28px; font-weight: 700; color: var(--text-main); margin: 4px 0; }
+.metric-subtext { font-size: 12px; color: var(--text-muted); }
+
+.metric-card.highlight { border-left: 4px solid var(--primary); }
+.metric-card.warning { border-left: 4px solid var(--danger); }
 
 /* Buttons & Badges */
 .btn {
@@ -198,21 +210,24 @@ body.devopsflow-body {
 
 .btn-primary { background-color: var(--primary); color: #ffffff; }
 .btn-primary:hover { background-color: var(--primary-hover); }
-
 .btn-secondary { background-color: var(--secondary); color: #ffffff; }
 .btn-success { background-color: var(--success); color: #ffffff; }
 .btn-danger { background-color: var(--danger); color: #ffffff; }
 .btn-warning { background-color: var(--warning); color: #ffffff; }
-.btn-outline { background-color: transparent; border-color: var(--border); color: var(--text-main); }
-
-.btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 4px; text-decoration: none; display: inline-block; }
+.btn-outline-primary { background-color: transparent; border-color: var(--primary); color: var(--primary); }
+.btn-outline-secondary { background-color: transparent; border-color: var(--border); color: var(--text-main); }
+.btn-outline-danger { background-color: transparent; border-color: var(--danger); color: var(--danger); }
+.btn-outline-success { background-color: transparent; border-color: var(--success); color: var(--success); }
+.btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 4px; }
 
 .badge {
     display: inline-block;
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .badge-success { background-color: #dcfce7; color: #15803d; }
@@ -220,52 +235,66 @@ body.devopsflow-body {
 .badge-warning { background-color: #fef3c7; color: #b45309; }
 .badge-info { background-color: #e0f2fe; color: #0369a1; }
 .badge-secondary { background-color: #f1f5f9; color: #475569; }
+.badge-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-main); }
 
-/* Form Controls */
-.form-group {
-    margin-bottom: 16px;
-}
+.badge-role { background-color: #0f172a; color: #ffffff; border: 1px solid #334155; }
+.role-badge-admin { background-color: #dc2626; color: #ffffff; }
+.role-badge-devops-engineer { background-color: #0284c7; color: #ffffff; }
+.role-badge-developer { background-color: #16a34a; color: #ffffff; }
+.role-badge-qa-engineer { background-color: #d97706; color: #ffffff; }
+.role-badge-viewer { background-color: #64748b; color: #ffffff; }
 
-.form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-main);
-}
-
-.form-control {
+/* Tables */
+.table {
     width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    border-collapse: collapse;
     font-size: 14px;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary);
+.table th, .table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
 }
 
-.form-row {
+.table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #f8fafc;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.6);
     display: flex;
-    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
 }
 
-.col-6 { flex: 1; }
-.col-4 { width: 33.33%; }
-.col-5 { width: 41.66%; }
-.col-2 { width: 16.66%; }
-
-/* Cards & Tables */
-.card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
+.modal-dialog {
+    background-color: #ffffff;
     border-radius: 8px;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.card-header {
+.modal-header {
     padding: 16px 20px;
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -273,55 +302,32 @@ body.devopsflow-body {
     align-items: center;
 }
 
-.card-header h3 {
-    font-size: 16px;
-    font-weight: 600;
-}
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); background-color: #f8fafc; display: flex; justify-content: flex-end; gap: 10px; }
 
-.card-body {
-    padding: 20px;
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.data-table th, .data-table td {
+/* Alerts */
+.flash-messages { margin-bottom: 20px; }
+.alert {
     padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-.data-table th {
-    background-color: #f8fafc;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.data-table tr:hover {
-    background-color: #f1f5f9;
-}
-
-/* Terminal Log Viewer */
-.terminal-log-viewer {
-    background-color: #0f172a;
-    color: #38bdf8;
-    font-family: "Courier New", Courier, monospace;
-    padding: 16px;
     border-radius: 6px;
-    max-height: 400px;
-    overflow-y: auto;
-    font-size: 13px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
 }
 
-.log-line {
-    margin-bottom: 4px;
-    word-break: break-all;
-}
+.alert-category-tag { font-weight: 700; font-size: 12px; }
+.alert-success { background-color: #dcfce7; border: 1px solid #86efac; color: #166534; }
+.alert-danger { background-color: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
+.alert-warning { background-color: #fef3c7; border: 1px solid #fde047; color: #854d0e; }
+.alert-info { background-color: #e0f2fe; border: 1px solid #7dd3fc; color: #075985; }
+.alert-close { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; }
 
-/* Auth Cards */
+/* Auth Layout */
 .auth-layout {
     display: flex;
     justify-content: center;
@@ -344,11 +350,6 @@ body.devopsflow-body {
     margin-bottom: 24px;
 }
 
-.auth-logo {
-    font-size: 36px;
-    margin-bottom: 12px;
-}
-
 .auth-demo-accounts {
     background-color: #f8fafc;
     border: 1px solid var(--border);
@@ -356,9 +357,4 @@ body.devopsflow-body {
     border-radius: 6px;
     margin-top: 20px;
     font-size: 12px;
-}
-
-.auth-demo-accounts ul {
-    margin-top: 6px;
-    padding-left: 20px;
 }

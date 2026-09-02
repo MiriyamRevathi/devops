@@ -28,5 +28,15 @@
     "checksum_sha256": "9f86d081884c7d659a2feaa0c55ad015",
     "created_by": "admin",
     "created_at": "2026-08-31T10:34:13.422180+00:00"
+  },
+  {
+    "id": "art_4490a5d4d1d8",
+    "name": "sdfghjkl",
+    "version": "sdfghjkl;",
+    "artifact_type": "wheel",
+    "size_bytes": 2048576,
+    "checksum_sha256": "57a93d170f037cf6ed8b077e9191b962",
+    "created_by": "admin",
+    "created_at": "2026-09-02T04:17:13.268191+00:00"
   }
 ]

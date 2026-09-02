@@ -4,86 +4,90 @@
 {% block content %}
 <div class="page-header">
     <div class="header-titles">
-        <h1>DevOps Control Center Dashboard</h1>
-        <p>Real-time lifecycle monitoring, CI/CD pipeline execution status, and DORA performance analytics.</p>
+        <h1 class="page-title">DevOps Control Center Dashboard</h1>
+        <p class="text-muted">Real-time lifecycle monitoring, CI/CD pipeline execution status, and DORA performance analytics.</p>
     </div>
     <div class="header-actions">
-        <a href="{{ url_for('pipelines.create') }}" class="btn btn-primary">+ New Pipeline</a>
-        <a href="{{ url_for('deployments.deploy') }}" class="btn btn-secondary">🚀 Deploy Release</a>
+        {% if has_permission('pipeline.create') %}
+        <a href="{{ url_for('pipelines.create') }}" class="btn btn-primary">New Pipeline</a>
+        {% endif %}
+        {% if has_permission('deployment.create') and current_user.role in ['Admin', 'DevOps Engineer'] %}
+        <a href="{{ url_for('deployments.create_deployment') }}" class="btn btn-secondary">Deploy Release</a>
+        {% endif %}
     </div>
 </div>
 
-<!-- DORA & Key Metrics Cards -->
-<div class="metrics-grid">
+<!-- Key Performance & DORA Metrics -->
+<div class="metrics-grid mb-4">
     <div class="metric-card">
-        <div class="metric-icon">📁</div>
         <div class="metric-data">
-            <div class="metric-value">{{ active_projects_count }}</div>
-            <div class="metric-label">Active Projects</div>
+            <span class="metric-label">Active Projects</span>
+            <span class="metric-value">{{ active_projects_count }}</span>
+            <span class="metric-subtext">Monitored repositories</span>
         </div>
     </div>
     <div class="metric-card">
-        <div class="metric-icon">🚀</div>
         <div class="metric-data">
-            <div class="metric-value">{{ total_runs_count }}</div>
-            <div class="metric-label">Pipeline Runs</div>
+            <span class="metric-label">Pipeline Runs</span>
+            <span class="metric-value">{{ total_runs_count }}</span>
+            <span class="metric-subtext">Total executions</span>
         </div>
     </div>
     <div class="metric-card">
-        <div class="metric-icon">✅</div>
         <div class="metric-data">
-            <div class="metric-value">{{ build_success_rate }}%</div>
-            <div class="metric-label">Build Success Rate</div>
+            <span class="metric-label">Build Success Rate</span>
+            <span class="metric-value text-success">{{ build_success_rate }}%</span>
+            <span class="metric-subtext">Passed build ratio</span>
         </div>
     </div>
     <div class="metric-card">
-        <div class="metric-icon">📦</div>
         <div class="metric-data">
-            <div class="metric-value">{{ prod_deployments_count }}</div>
-            <div class="metric-label">Production Deployments</div>
+            <span class="metric-label">Production Deployments</span>
+            <span class="metric-value">{{ prod_deployments_count }}</span>
+            <span class="metric-subtext">Live releases</span>
         </div>
     </div>
     <div class="metric-card highlight">
-        <div class="metric-icon">⚡</div>
         <div class="metric-data">
-            <div class="metric-value">{{ dora.rating }}</div>
-            <div class="metric-label">DORA Rating</div>
+            <span class="metric-label">DORA Rating</span>
+            <span class="metric-value text-info">{{ dora.rating }}</span>
+            <span class="metric-subtext">DevOps maturity level</span>
         </div>
     </div>
     <div class="metric-card warning">
-        <div class="metric-icon">🚨</div>
         <div class="metric-data">
-            <div class="metric-value">{{ active_incidents|length }}</div>
-            <div class="metric-label">Active Incidents</div>
+            <span class="metric-label">Active Incidents</span>
+            <span class="metric-value text-danger">{{ active_incidents | length }}</span>
+            <span class="metric-subtext">Open tickets</span>
         </div>
     </div>
 </div>
 
-<!-- Main Content Grid -->
-<div class="dashboard-grid">
-    <!-- Left Column: Pipeline & Deployment Timelines -->
-    <div class="grid-column">
-        <div class="card">
-            <div class="card-header">
-                <h3>Recent CI/CD Pipeline Runs</h3>
-                <a href="{{ url_for('pipelines.index') }}" class="btn-link">View All</a>
-            </div>
-            <div class="card-body">
-                <table class="data-table">
+<!-- Main Dashboard Data Layout -->
+<div class="dashboard-grid grid-2 mb-4">
+    <!-- Pipeline Runs Column -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Recent CI/CD Pipeline Runs</h3>
+            <a href="{{ url_for('pipelines.index') }}" class="btn-link">View All Pipelines</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>Run #</th>
+                            <th>Run ID</th>
                             <th>Branch</th>
                             <th>Status</th>
                             <th>Duration</th>
-                            <th>Action</th>
+                            <th>Logs</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for run in recent_runs %}
                         <tr>
-                            <td><strong>#{{ run.run_number }}</strong></td>
-                            <td><code>{{ run.branch }}</code></td>
+                            <td><strong>#{{ run.id or run.run_number }}</strong></td>
+                            <td><span class="badge badge-outline">{{ run.branch or run.target_branch }}</span></td>
                             <td>
                                 <span class="badge badge-{% if run.status == 'SUCCESS' %}success{% elif run.status == 'FAILED' %}danger{% else %}warning{% endif %}">
                                     {{ run.status }}
@@ -91,7 +95,7 @@
                             </td>
                             <td>{{ run.duration_seconds }}s</td>
                             <td>
-                                <a href="{{ url_for('pipelines.run_detail', run_id=run.id) }}" class="btn-sm">Logs</a>
+                                <a href="{{ url_for('pipelines.index') }}" class="btn btn-sm btn-outline-primary">View</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -99,17 +103,20 @@
                 </table>
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Recent Production Deployments</h3>
-                <a href="{{ url_for('deployments.index') }}" class="btn-link">View All</a>
-            </div>
-            <div class="card-body">
-                <table class="data-table">
+    <!-- Production Deployments Column -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Recent Deployments</h3>
+            <a href="{{ url_for('deployments.list_deployments') }}" class="btn-link">View Deployments</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Deployment</th>
                             <th>Environment</th>
                             <th>Version</th>
                             <th>Status</th>
@@ -135,60 +142,73 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Right Column: Services & Active Incidents -->
-    <div class="grid-column">
-        <div class="card">
-            <div class="card-header">
-                <h3>Microservices Health</h3>
-                <a href="{{ url_for('services.index') }}" class="btn-link">Service Catalog</a>
-            </div>
-            <div class="card-body">
-                <div class="services-list">
-                    {% for svc in services %}
-                    <div class="service-item">
-                        <div class="svc-info">
-                            <span class="svc-name">{{ svc.name }}</span>
-                            <span class="svc-ver">{{ svc.version }}</span>
-                        </div>
-                        <div class="svc-metrics">
-                            <span>CPU: {{ svc.cpu_usage }}%</span> |
-                            <span>RAM: {{ svc.memory_usage }}MB</span>
-                        </div>
-                        <div class="svc-status">
-                            <span class="badge badge-{% if svc.status == 'RUNNING' %}success{% else %}danger{% endif %}">
-                                {{ svc.status }}
-                            </span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+<!-- Secondary Grid: Microservices & Incidents -->
+<div class="dashboard-grid grid-2">
+    <!-- Microservice Catalog -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Microservice Telemetry & Health</h3>
+            <a href="{{ url_for('services.index') }}" class="btn-link">Service Catalog</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Version</th>
+                            <th>CPU</th>
+                            <th>Memory</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for svc in services %}
+                        <tr>
+                            <td><strong>{{ svc.name }}</strong></td>
+                            <td><span class="badge badge-outline">{{ svc.version }}</span></td>
+                            <td>{{ svc.cpu_usage }}%</td>
+                            <td>{{ svc.memory_usage }}MB</td>
+                            <td>
+                                <span class="badge badge-{% if svc.status == 'RUNNING' %}success{% else %}danger{% endif %}">
+                                    {{ svc.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Active Incidents Summary</h3>
-                <a href="{{ url_for('incidents.index') }}" class="btn-link">Incident Room</a>
-            </div>
-            <div class="card-body">
-                {% if active_incidents %}
-                    {% for inc in active_incidents %}
-                    <div class="incident-alert-item">
-                        <div class="inc-head">
+    <!-- Active Incidents Panel -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Active Incidents</h3>
+            <a href="{{ url_for('incidents.list_incidents') }}" class="btn-link">Incident Room</a>
+        </div>
+        <div class="card-body">
+            {% if active_incidents %}
+                <div class="incidents-list">
+                {% for inc in active_incidents %}
+                    <div class="incident-item p-3 mb-2 border rounded">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="badge badge-danger">{{ inc.severity }}</span>
-                            <strong>{{ inc.title }}</strong>
+                            <span class="text-muted small">Service: {{ inc.service_id or inc.service }}</span>
                         </div>
-                        <p>{{ inc.summary }}</p>
-                        <div class="inc-meta">
-                            <span>Service: {{ inc.service }}</span> | <span>Assignee: {{ inc.assignee }}</span>
-                        </div>
+                        <h5 class="mb-1"><strong>{{ inc.title }}</strong></h5>
+                        <p class="small text-muted mb-0">{{ inc.description or inc.summary }}</p>
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted">No active critical incidents. All systems operational. ✅</p>
-                {% endif %}
-            </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="p-4 text-center text-muted">
+                    <p class="mb-0">No active critical incidents. All systems operational.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, session, g
 from config import config_by_name, Config
 from core.extensions import extensions
+from core.security import SecurityManager
 
 def create_app(config_name: str = "default") -> Flask:
     """Flask Application Factory for DevOpsFlow enterprise platform."""
@@ -41,6 +42,9 @@ def create_app(config_name: str = "default") -> Flask:
     from routes.changes import changes_bp
     from routes.audit import audit_bp
     from routes.analytics import analytics_bp
+    from routes.users import users_bp
+    from routes.testing import testing_bp
+    from routes.settings import settings_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
@@ -64,21 +68,35 @@ def create_app(config_name: str = "default") -> Flask:
     app.register_blueprint(changes_bp)
     app.register_blueprint(audit_bp)
     app.register_blueprint(analytics_bp)
+    app.register_blueprint(users_bp)
+    app.register_blueprint(testing_bp)
+    app.register_blueprint(settings_bp)
 
     # Context Processors & Template Helpers
     @app.context_processor
     def inject_global_context():
+        user_role = session.get("role", "Viewer")
+        user_perms = SecurityManager.get_user_permissions(user_role)
+        allowed_nav = Config.ROLE_NAV.get(user_role, Config.ROLE_NAV["Viewer"])
+        
         return {
             "current_user": {
                 "id": session.get("user_id"),
                 "username": session.get("username", "Guest"),
-                "role": session.get("role", "Viewer"),
+                "role": user_role,
                 "full_name": session.get("full_name", "Guest User")
             },
+            "user_permissions": user_perms,
+            "has_permission": lambda perm: SecurityManager.has_permission(user_role, perm),
+            "allowed_nav": allowed_nav,
             "roles": Config.ROLES
         }
 
     # Error Handlers
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template("errors/403.html"), 403
+
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("errors/404.html"), 404

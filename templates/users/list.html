@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}User & Role Management - DevOpsFlow{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">User & Role Management</h1>
+        <p class="text-muted">Manage platform accounts, role assignments, and active account statuses.</p>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('modal-create-user').style.display='block'">
+        Create New User
+    </button>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Platform Users ({{ users | length }})</h3>
+        <span class="badge badge-info">Admin Control Panel</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td><strong>{{ u.username }}</strong></td>
+                        <td>{{ u.full_name }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            <form action="{{ url_for('users.update_role', user_id=u.id) }}" method="POST" class="d-flex align-items-center gap-2">
+                                <select name="role" class="form-select form-select-sm" style="width: auto;">
+                                    {% for r in available_roles %}
+                                    <option value="{{ r }}" {% if u.role == r %}selected{% endif %}>{{ r }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
+                            </form>
+                        </td>
+                        <td>
+                            {% if u.is_active %}
+                            <span class="badge badge-success">ACTIVE</span>
+                            {% else %}
+                            <span class="badge badge-danger">DEACTIVATED</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                {% if u.id != current_user.id %}
+                                <form action="{{ url_for('users.toggle_status', user_id=u.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm {% if u.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                                        {% if u.is_active %}Deactivate{% else %}Activate{% endif %}
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('users.delete_user', user_id=u.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete user {{ u.username }}?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted small">Current Account</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Create New User -->
+<div id="modal-create-user" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Create Platform User</h3>
+            <button class="modal-close" onclick="document.getElementById('modal-create-user').style.display='none'">&times;</button>
+        </div>
+        <form action="{{ url_for('users.create_user') }}" method="POST">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required placeholder="e.g. dev_engineer">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="full_name" class="form-control" required placeholder="e.g. Jane Doe">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required placeholder="jane.doe@company.local">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Role Assignment</label>
+                    <select name="role" class="form-select">
+                        {% for r in available_roles %}
+                        <option value="{{ r }}">{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required placeholder="Set initial password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-create-user').style.display='none'">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

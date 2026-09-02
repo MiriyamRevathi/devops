@@ -178,5 +178,32 @@
     "error_rate": 0.01,
     "request_rate": 496.1,
     "timestamp": "2026-08-31T10:34:00.715940+00:00"
+  },
+  {
+    "cpu_percent": 0.0,
+    "memory_percent": 68.9,
+    "disk_percent": 63.5,
+    "response_time_ms": 135.0,
+    "error_rate": 0.01,
+    "request_rate": 206.0,
+    "timestamp": "2026-09-02T04:17:41.199733+00:00"
+  },
+  {
+    "cpu_percent": 0.0,
+    "memory_percent": 68.2,
+    "disk_percent": 63.5,
+    "response_time_ms": 182.1,
+    "error_rate": 0.006,
+    "request_rate": 151.1,
+    "timestamp": "2026-09-02T04:17:48.511656+00:00"
+  },
+  {
+    "cpu_percent": 0.0,
+    "memory_percent": 68.6,
+    "disk_percent": 63.5,
+    "response_time_ms": 159.8,
+    "error_rate": 0.008,
+    "request_rate": 358.2,
+    "timestamp": "2026-09-02T04:18:05.658185+00:00"
   }
 ]

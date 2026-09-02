@@ -1,54 +1,149 @@
 {% extends "base.html" %}
 {% block title %}Container Engine — DevOpsFlow{% endblock %}
-{% block content %}
-<div class="page-header">
-    <h1>Local Container Engine Simulator</h1>
-    <p>Simulates Docker container lifecycles safely (start, stop, restart, inspect, ports).</p>
-</div>
 
-<div class="card">
-    <div class="card-body">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Container ID</th>
-                    <th>Name</th>
-                    <th>Image : Tag</th>
-                    <th>Ports</th>
-                    <th>CPU %</th>
-                    <th>RAM (MB)</th>
-                    <th>Status</th>
-                    <th>Control Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cnt in containers %}
-                <tr>
-                    <td><code>{{ cnt.id }}</code></td>
-                    <td><strong>{{ cnt.name }}</strong></td>
-                    <td><code>{{ cnt.image }}:{{ cnt.tag }}</code></td>
-                    <td><code>{{ cnt.ports }}</code></td>
-                    <td>{{ cnt.cpu_percent }}%</td>
-                    <td>{{ cnt.memory_usage_mb }} MB</td>
-                    <td><span class="badge badge-{% if cnt.status == 'RUNNING' %}success{% else %}secondary{% endif %}">{{ cnt.status }}</span></td>
-                    <td>
-                        {% if cnt.status == 'RUNNING' %}
-                        <form action="{{ url_for('containers.stop', container_id=cnt.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn-sm btn-danger">Stop</button>
-                        </form>
-                        {% else %}
-                        <form action="{{ url_for('containers.start', container_id=cnt.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn-sm btn-success">Start</button>
-                        </form>
-                        {% endif %}
-                        <form action="{{ url_for('containers.restart', container_id=cnt.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn-sm btn-warning">Restart</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Local Container Engine Simulator</h1>
+        <p class="text-muted">Simulate Docker container lifecycle actions: start, stop, restart, inspect, and remove.</p>
+    </div>
+    <div class="header-actions">
+        {% if has_permission('container.create') %}
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('modal-create-container').style.display='flex'">
+            Create Container
+        </button>
+        {% endif %}
     </div>
 </div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Managed Containers ({{ containers | length }})</h3>
+        <span class="badge badge-info">Container Engine</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Container ID</th>
+                        <th>Name</th>
+                        <th>Image : Tag</th>
+                        <th>Ports</th>
+                        <th>CPU %</th>
+                        <th>RAM</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cnt in containers %}
+                    <tr>
+                        <td><code>{{ cnt.id[:10] }}</code></td>
+                        <td><strong>{{ cnt.name }}</strong></td>
+                        <td><code>{{ cnt.image }}:{{ cnt.tag or 'alpine' }}</code></td>
+                        <td><code>{{ cnt.ports or '8080:80' }}</code></td>
+                        <td>{{ cnt.cpu_percent or 1.2 }}%</td>
+                        <td>{{ cnt.memory_usage_mb or 128 }} MB</td>
+                        <td>
+                            <span class="badge badge-{% if cnt.status == 'RUNNING' %}success{% else %}secondary{% endif %}">
+                                {{ cnt.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                {% if cnt.status == 'RUNNING' and has_permission('container.stop') %}
+                                <form action="{{ url_for('containers.stop_container', container_id=cnt.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Stop</button>
+                                </form>
+                                {% elif cnt.status != 'RUNNING' and has_permission('container.start') %}
+                                <form action="{{ url_for('containers.start_container', container_id=cnt.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Start</button>
+                                </form>
+                                {% endif %}
+
+                                {% if has_permission('container.restart') %}
+                                <form action="{{ url_for('containers.restart_container', container_id=cnt.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-outline-warning">Restart</button>
+                                </form>
+                                {% endif %}
+
+                                {% if has_permission('container.remove') %}
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="openRemoveContainerModal('{{ cnt.id }}', '{{ cnt.name }}', '{{ cnt.image }}')">
+                                    Remove
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Create Container -->
+<div id="modal-create-container" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Provision New Container</h3>
+            <button class="modal-close" onclick="document.getElementById('modal-create-container').style.display='none'">&times;</button>
+        </div>
+        <form action="{{ url_for('containers.create_container') }}" method="POST">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Container Name</label>
+                    <input type="text" name="name" class="form-control" required placeholder="e.g. redis-cache-cluster">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Docker Image</label>
+                    <input type="text" name="image" class="form-control" required placeholder="e.g. redis:alpine">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-create-container').style.display='none'">Cancel</button>
+                <button type="submit" class="btn btn-primary">Deploy Container</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Remove Container Confirmation -->
+<div id="modal-remove-container" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm Container Removal</h3>
+            <button class="modal-close" onclick="document.getElementById('modal-remove-container').style.display='none'">&times;</button>
+        </div>
+        <form id="form-remove-container" action="" method="POST">
+            <div class="modal-body">
+                <div class="alert alert-warning mb-3">
+                    <strong>Confirm Removal:</strong> Are you sure you want to stop and remove this container instance?
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Container Name</label>
+                    <input type="text" id="rm-container-name" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="text" id="rm-container-image" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-remove-container').style.display='none'">Cancel</button>
+                <button type="submit" class="btn btn-danger">Remove Container</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openRemoveContainerModal(id, name, image) {
+    document.getElementById('form-remove-container').action = '/containers/' + id + '/remove';
+    document.getElementById('rm-container-name').value = name;
+    document.getElementById('rm-container-image').value = image;
+    document.getElementById('modal-remove-container').style.display = 'flex';
+}
+</script>
 {% endblock %}

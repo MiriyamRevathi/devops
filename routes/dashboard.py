@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, url_for, current_app
+from core.security import login_required
 from repositories.project_repo import ProjectRepository
 from repositories.pipeline_repo import PipelineRepository
 from repositories.deployment_repo import DeploymentRepository
@@ -10,10 +11,8 @@ from services.monitoring_service import MonitoringService
 dashboard_bp = Blueprint("dashboard", __name__)
 
 @dashboard_bp.route("/")
+@login_required
 def index():
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
     proj_repo = ProjectRepository(current_app.config["PROJECTS_DATA_DIR"])
     pipe_repo = PipelineRepository(current_app.config["PIPELINES_DATA_DIR"])
     dep_repo = DeploymentRepository(current_app.config["DEPLOYMENTS_DATA_DIR"])
@@ -28,7 +27,6 @@ def index():
     services = svc_repo.get_all()
     incidents = inc_repo.get_all()
 
-    # Calculate Summary Stats
     active_projects_count = len([p for p in projects if p.is_active()])
     successful_runs = [r for r in pipeline_runs if r.status == "SUCCESS"]
     failed_runs = [r for r in pipeline_runs if r.status == "FAILED"]
